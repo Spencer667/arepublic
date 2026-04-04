@@ -1,0 +1,12 @@
+天气出行助手
+极简天气出行 AI 助手，支持输入城市自动获取天气与出行建议。
+技术栈
+后端：FastAPI
+前端：HTML/CSS/JS
+搜索：DuckDuckGo Search
+核心文件
+backend.py：服务与天气逻辑
+index.html/style.css/script.js：聊天界面
+启动助手.bat：Windows 一键启动
+功能
+输入城市 → 获取天气 → 智能出行建议
