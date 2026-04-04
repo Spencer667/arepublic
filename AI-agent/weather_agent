@@ -1,0 +1,6 @@
+weather_agent/
+├─ backend.py       # Python MCP 后端 + 联网天气 + 接口
+├─ index.html       # HTML 前端页面
+├─ style.css        # 前端样式
+├─ script.js        # 前端交互逻辑
+└─ 启动助手.bat     # Windows 一键双击启动（自动开后端+前端）
