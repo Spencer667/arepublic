@@ -1,1 +1,2 @@
-团队文档
+当需要使用这个小工具时需要在终端内输入npm install，在输入node server.js
+用的是Doubao-Seed-Character这个模型，需要使用者创建api key
