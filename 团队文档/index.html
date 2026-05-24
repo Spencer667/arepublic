@@ -1,0 +1,2628 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+       <meta charset="UTF-8">
+       <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+       <title>洛克小助手</title>
+       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+       <style>
+              * {
+                     margin: 0;
+                     padding: 0;
+                     box-sizing: border-box;
+                     -webkit-tap-highlight-color: transparent;
+              }
+
+              :root {
+                     --bg: #F5F5F5;
+                     --card: #FFFFFF;
+                     --text: #333333;
+                     --text-light: #999999;
+                     --border: #EEEEEE;
+                     --primary: #FF6B35;
+                     --blue: #3B82F6;
+                     --green: #10B981;
+                     --red: #EF4444;
+                     --purple: #8B5CF6;
+                     --safe-bottom: env(safe-area-inset-bottom, 0px);
+              }
+
+              body {
+                     font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+                     background: var(--bg);
+                     color: var(--text);
+                     min-height: 100vh;
+                     padding-bottom: calc(60px + var(--safe-bottom));
+              }
+
+              /* ===== HOME PAGE ===== */
+              .home-header {
+                     background: var(--card);
+                     padding: 12px 16px;
+                     text-align: center;
+                     font-size: 18px;
+                     font-weight: 700;
+                     border-bottom: 1px solid var(--border);
+                     position: sticky;
+                     top: 0;
+                     z-index: 100;
+              }
+
+              /* Feature Grid 2x3 */
+              .feature-grid {
+                     display: grid;
+                     grid-template-columns: repeat(3, 1fr);
+                     gap: 1px;
+                     background: var(--border);
+                     border: 1px solid var(--border);
+                     margin: 12px;
+                     border-radius: 12px;
+                     overflow: hidden;
+              }
+
+              .feature-item {
+                     background: var(--card);
+                     display: flex;
+                     flex-direction: column;
+                     align-items: center;
+                     justify-content: center;
+                     padding: 12px 4px;
+                     cursor: pointer;
+                     transition: background 0.15s;
+                     min-height: 64px;
+              }
+
+              .feature-item:active {
+                     background: #f8f8f8;
+              }
+
+              .feature-item .ficon {
+                     font-size: 18px;
+                     color: #555;
+                     margin-bottom: 4px;
+              }
+
+              .feature-item .fname {
+                     font-size: 11px;
+                     color: var(--text);
+                     text-align: center;
+                     white-space: nowrap;
+              }
+
+              .feature-item .fname.red {
+                     color: var(--red);
+              }
+
+              /* ===== MERCHANT SECTION (Dark Theme) ===== */
+              .merchant-section {
+                     margin: 12px;
+              }
+
+              .merchant-card {
+                     background: #3D4852;
+                     border-radius: 12px;
+                     overflow: hidden;
+                     color: #fff;
+              }
+
+              .merchant-header {
+                     padding: 16px;
+                     display: flex;
+                     justify-content: space-between;
+                     align-items: flex-start;
+              }
+
+              .merchant-title {
+                     font-size: 18px;
+                     font-weight: 700;
+              }
+
+              .merchant-date {
+                     font-size: 13px;
+                     color: #aaa;
+                     margin-top: 4px;
+              }
+
+              .merchant-badges {
+                     display: flex;
+                     gap: 8px;
+              }
+
+              .badge {
+                     padding: 4px 10px;
+                     border-radius: 12px;
+                     font-size: 12px;
+                     font-weight: 600;
+              }
+
+              .badge-green {
+                     background: rgba(16, 185, 129, 0.2);
+                     color: #10B981;
+              }
+
+              .badge-blue {
+                     background: rgba(59, 130, 246, 0.2);
+                     color: #60A5FA;
+              }
+
+              .merchant-items {
+                     padding: 0 12px 12px;
+              }
+
+              .mitem {
+                     display: flex;
+                     align-items: center;
+                     background: rgba(255, 255, 255, 0.08);
+                     border-radius: 10px;
+                     padding: 12px;
+                     margin-bottom: 8px;
+              }
+
+              .mitem-icon {
+                     width: 40px;
+                     height: 40px;
+                     border-radius: 50%;
+                     background: rgba(255, 255, 255, 0.1);
+                     display: flex;
+                     align-items: center;
+                     justify-content: center;
+                     font-size: 18px;
+                     margin-right: 12px;
+                     flex-shrink: 0;
+              }
+
+              .mitem-info {
+                     flex: 1;
+              }
+
+              .mitem-name {
+                     font-size: 15px;
+                     font-weight: 600;
+              }
+
+              .mitem-time {
+                     font-size: 12px;
+                     color: #aaa;
+                     margin-top: 2px;
+                     background: rgba(255, 255, 255, 0.1);
+                     display: inline-block;
+                     padding: 2px 8px;
+                     border-radius: 4px;
+              }
+
+              .mitem-timer {
+                     background: var(--primary);
+                     color: #fff;
+                     padding: 8px 14px;
+                     border-radius: 20px;
+                     font-size: 13px;
+                     font-weight: 700;
+                     display: flex;
+                     align-items: center;
+                     gap: 6px;
+              }
+
+              .merchant-rounds {
+                     padding: 0 12px 12px;
+              }
+
+              .round-card {
+                     background: rgba(255, 255, 255, 0.06);
+                     border-radius: 8px;
+                     padding: 10px 12px;
+                     margin-bottom: 8px;
+                     display: flex;
+                     align-items: center;
+                     gap: 12px;
+              }
+
+              .round-label {
+                     font-size: 13px;
+                     color: #aaa;
+                     min-width: 60px;
+              }
+
+              .round-items {
+                     display: flex;
+                     gap: 8px;
+                     flex-wrap: wrap;
+              }
+
+              .round-item {
+                     display: flex;
+                     align-items: center;
+                     gap: 4px;
+                     font-size: 12px;
+                     background: rgba(255, 255, 255, 0.08);
+                     padding: 4px 8px;
+                     border-radius: 6px;
+              }
+
+              .round-item i {
+                     font-size: 14px;
+              }
+
+              /* ===== DETAIL PAGES ===== */
+              .detail-page {
+                     display: none;
+                     position: fixed;
+                     top: 0;
+                     left: 0;
+                     right: 0;
+                     bottom: 0;
+                     background: var(--bg);
+                     z-index: 200;
+                     overflow-y: auto;
+                     animation: slideIn 0.25s ease;
+              }
+
+              @keyframes slideIn {
+                     from {
+                            opacity: 0;
+                            transform: translateX(20px);
+                     }
+
+                     to {
+                            opacity: 1;
+                            transform: translateX(0);
+                     }
+              }
+
+              .detail-page.show {
+                     display: block;
+              }
+
+              .detail-header {
+                     background: var(--card);
+                     padding: 12px 16px;
+                     display: flex;
+                     align-items: center;
+                     gap: 12px;
+                     border-bottom: 1px solid var(--border);
+                     position: sticky;
+                     top: 0;
+                     z-index: 10;
+              }
+
+              .back-btn {
+                     width: 32px;
+                     height: 32px;
+                     border-radius: 50%;
+                     border: none;
+                     background: var(--bg);
+                     cursor: pointer;
+                     font-size: 14px;
+                     display: flex;
+                     align-items: center;
+                     justify-content: center;
+              }
+
+              .detail-title {
+                     font-size: 17px;
+                     font-weight: 700;
+                     flex: 1;
+                     text-align: center;
+                     margin-right: 44px;
+              }
+
+              .detail-body {
+                     padding: 12px;
+                     padding-bottom: 80px;
+              }
+
+              /* Search Bar in Detail Pages */
+              .search-box {
+                     display: flex;
+                     background: var(--card);
+                     border-radius: 8px;
+                     overflow: hidden;
+                     margin-bottom: 12px;
+                     border: 1px solid var(--border);
+              }
+
+              .search-box input {
+                     flex: 1;
+                     border: none;
+                     padding: 10px 12px;
+                     font-size: 14px;
+                     outline: none;
+              }
+
+              .search-box button {
+                     background: var(--blue);
+                     color: #fff;
+                     border: none;
+                     padding: 0 16px;
+                     cursor: pointer;
+                     font-size: 16px;
+              }
+
+              /* Filter Row */
+              .filter-row {
+                     display: flex;
+                     gap: 8px;
+                     margin-bottom: 12px;
+                     flex-wrap: wrap;
+              }
+
+              .filter-row select,
+              .filter-row input {
+                     padding: 8px 10px;
+                     border: 1px solid var(--border);
+                     border-radius: 6px;
+                     font-size: 13px;
+                     background: var(--card);
+                     outline: none;
+              }
+
+              /* Cards Grid (for pets/skills) */
+              .cards-grid {
+                     display: grid;
+                     grid-template-columns: repeat(2, 1fr);
+                     gap: 10px;
+              }
+
+              @media (min-width: 500px) {
+                     .cards-grid {
+                            grid-template-columns: repeat(3, 1fr);
+                     }
+              }
+
+              .card {
+                     background: var(--card);
+                     border-radius: 8px;
+                     padding: 8px;
+                     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+                     cursor: pointer;
+                     transition: transform 0.15s;
+              }
+
+              .card:active {
+                     transform: scale(0.97);
+              }
+
+              .card-img {
+                     width: 100%;
+                     height: 48px;
+                     background: var(--bg);
+                     border-radius: 6px;
+                     display: flex;
+                     align-items: center;
+                     justify-content: center;
+                     font-size: 18px;
+                     color: #ccc;
+                     margin-bottom: 4px;
+                     overflow: hidden;
+              }
+
+              .card-title {
+                     font-size: 12px;
+                     font-weight: 600;
+                     text-align: center;
+              }
+
+              .card-sub {
+                     font-size: 12px;
+                     color: var(--text-light);
+                     text-align: center;
+                     margin-top: 2px;
+              }
+
+              /* Skill Cards */
+              .skill-card {
+                     background: var(--card);
+                     border-radius: 10px;
+                     padding: 12px;
+                     margin-bottom: 10px;
+                     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+                     border-left: 4px solid var(--blue);
+              }
+
+              .skill-card.fire {
+                     border-left-color: #FF6B35;
+              }
+
+              .skill-card.water {
+                     border-left-color: #3B82F6;
+              }
+
+              .skill-card.grass {
+                     border-left-color: #10B981;
+              }
+
+              .skill-card.electric {
+                     border-left-color: #F59E0B;
+              }
+
+              .skill-card.ice {
+                     border-left-color: #06B6D4;
+              }
+
+              .skill-card.dark {
+                     border-left-color: #8B5CF6;
+              }
+
+              .skill-card.light {
+                     border-left-color: #FBBF24;
+              }
+
+              .skill-header {
+                     display: flex;
+                     justify-content: space-between;
+                     align-items: center;
+                     margin-bottom: 6px;
+              }
+
+              .skill-name {
+                     font-size: 15px;
+                     font-weight: 600;
+              }
+
+              .skill-power {
+                     background: var(--bg);
+                     padding: 2px 8px;
+                     border-radius: 4px;
+                     font-size: 12px;
+                     font-weight: 700;
+              }
+
+              .skill-info {
+                     font-size: 12px;
+                     color: var(--text-light);
+              }
+
+              /* List Items */
+              .list-item {
+                     background: var(--card);
+                     border-radius: 10px;
+                     padding: 14px;
+                     margin-bottom: 10px;
+                     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+              }
+
+              .list-title {
+                     font-size: 15px;
+                     font-weight: 600;
+                     margin-bottom: 4px;
+              }
+
+              .list-sub {
+                     font-size: 12px;
+                     color: var(--text-light);
+              }
+
+              /* Tags */
+              .tag {
+                     display: inline-block;
+                     font-size: 11px;
+                     padding: 2px 8px;
+                     border-radius: 4px;
+                     font-weight: 600;
+                     margin-right: 4px;
+              }
+
+              .tag-fire {
+                     background: #fbe9e7;
+                     color: #d84315;
+              }
+
+              .tag-water {
+                     background: #e3f2fd;
+                     color: #1565c0;
+              }
+
+              .tag-grass {
+                     background: #e8f5e9;
+                     color: #2e7d32;
+              }
+
+              .tag-electric {
+                     background: #fff8e1;
+                     color: #f57f17;
+              }
+
+              .tag-ice {
+                     background: #e0f7fa;
+                     color: #00838f;
+              }
+
+              .tag-dark {
+                     background: #eceff1;
+                     color: #37474f;
+              }
+
+              .tag-light {
+                     background: #fffde7;
+                     color: #f9a825;
+              }
+
+              .tag-ground {
+                     background: #efebe9;
+                     color: #795548;
+              }
+
+              .tag-wind {
+                     background: #e1f5fe;
+                     color: #0277bd;
+              }
+
+              .tag-dragon {
+                     background: #f3e5f5;
+                     color: #6a1b9a;
+              }
+
+              .tag-fighting {
+                     background: #ffebee;
+                     color: #b71c1c;
+              }
+
+              .tag-illusion {
+                     background: #f3e5f5;
+                     color: #7b1fa2;
+              }
+
+              .tag-normal {
+                     background: #f5f5f5;
+                     color: #8a8a8a;
+              }
+
+              .tag-wing {
+                     background: #e1f5fe;
+                     color: #0277bd;
+              }
+
+              .tag-bug {
+                     background: #f1f8e9;
+                     color: #558b2f;
+              }
+
+              .tag-steel {
+                     background: #eceff1;
+                     color: #546e7a;
+              }
+
+              .tag-poison {
+                     background: #f3e5f5;
+                     color: #6a1b9a;
+              }
+
+              .tag-ghost {
+                     background: #ede7f6;
+                     color: #311b92;
+              }
+
+              .tag-cute {
+                     background: #fce4ec;
+                     color: #ec407a;
+              }
+
+              .tag-rock {
+                     background: #efebe9;
+                     color: #795548;
+              }
+
+              .tag-psychic {
+                     background: #fce4ec;
+                     color: #c62828;
+              }
+
+              .tag-common {
+                     background: #f0f0f0;
+                     color: #666;
+              }
+
+              .tag-rare {
+                     background: #E0F0FF;
+                     color: #3B82F6;
+              }
+
+              .tag-epic {
+                     background: #F3E8FF;
+                     color: #8B5CF6;
+              }
+
+              .tag-legend {
+                     background: #FFF8E1;
+                     color: #D4A017;
+              }
+
+              .tag-primary {
+                     background: #D1FAE5;
+                     color: #059669;
+              }
+
+              .tag-intermediate {
+                     background: #FEF3C7;
+                     color: #D97706;
+              }
+
+              .tag-advanced {
+                     background: #FEE2E2;
+                     color: #DC2626;
+              }
+
+              .tag-最终形态 {
+                     background: #F3E8FF;
+                     color: #7C3AED;
+              }
+
+
+
+
+              /* Egg tabs */
+              .egg-tab {
+                     font-family: inherit;
+                     transition: all 0.2s;
+              }
+
+              .egg-tab:hover {
+                     color: var(--primary) !important;
+              }
+
+              /* Autocomplete dropdown item */
+              .ac-item {
+                     padding: 10px 12px;
+                     cursor: pointer;
+                     display: flex;
+                     align-items: center;
+                     gap: 10px;
+                     border-bottom: 1px solid var(--border);
+                     transition: background 0.1s;
+              }
+
+              .ac-item:last-child {
+                     border-bottom: none;
+              }
+
+              .ac-item:hover {
+                     background: var(--bg);
+              }
+
+              .ac-item img {
+                     width: 28px;
+                     height: 28px;
+                     border-radius: 4px;
+                     object-fit: contain;
+              }
+
+              .ac-item .ac-name {
+                     font-size: 14px;
+                     font-weight: 600;
+                     flex: 1;
+              }
+
+              .ac-item .ac-egg {
+                     font-size: 11px;
+                     color: var(--text-light);
+              }
+
+              /* Egg group pairing result */
+              .pair-match {
+                     background: #D1FAE5;
+                     color: #059669;
+                     padding: 20px;
+                     border-radius: 10px;
+                     text-align: center;
+                     font-weight: 700;
+                     font-size: 16px;
+              }
+
+              .pair-nomatch {
+                     background: #FEE2E2;
+                     color: #DC2626;
+                     padding: 20px;
+                     border-radius: 10px;
+                     text-align: center;
+                     font-weight: 700;
+                     font-size: 16px;
+              }
+
+              /* Egg sample buttons */
+              .egg-sample {
+                     padding: 4px 12px;
+                     border-radius: 100px;
+                     border: 1px solid var(--border);
+                     background: var(--card);
+                     font-size: 12px;
+                     cursor: pointer;
+                     transition: all 0.15s;
+                     font-family: inherit;
+                     color: var(--text);
+              }
+
+              .egg-sample:hover {
+                     border-color: var(--primary);
+                     color: var(--primary);
+              }
+
+              /* Egg result cards */
+              .egg-result-card {
+                     background: var(--card);
+                     border-radius: 8px;
+                     padding: 10px;
+                     margin-bottom: 8px;
+                     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+                     display: flex;
+                     align-items: center;
+                     gap: 10px;
+              }
+
+              .egg-result-icon {
+                     width: 28px;
+                     height: 28px;
+                     border-radius: 6px;
+                     background: var(--bg);
+                     display: flex;
+                     align-items: center;
+                     justify-content: center;
+                     font-size: 12px;
+                     color: #999;
+                     flex-shrink: 0;
+              }
+
+              .egg-result-info {
+                     flex: 1;
+                     min-width: 0;
+              }
+
+              .pair-btn-wrap {
+                     margin-top: 12px;
+              }
+
+              .pair-btn-wrap .btn-primary {
+                     width: 100%;
+              }
+
+              .egg-result-name {
+                     font-size: 13px;
+                     font-weight: 600;
+              }
+
+              .egg-result-range {
+                     font-size: 12px;
+                     color: var(--text-light);
+                     margin-top: 2px;
+              }
+
+              .egg-result-badge {
+                     display: inline-block;
+                     font-size: 11px;
+                     padding: 3px 10px;
+                     border-radius: 100px;
+                     font-weight: 700;
+                     flex-shrink: 0;
+              }
+
+              .badge-exact {
+                     background: #D1FAE5;
+                     color: #059669;
+              }
+
+              .badge-range {
+                     background: #E0F2FE;
+                     color: #0284C7;
+              }
+
+              .badge-partial {
+                     background: #FEF3C7;
+                     color: #D97706;
+              }
+
+              .badge-近似 {
+                     background: #F3E8FF;
+                     color: #7C3AED;
+              }
+
+              /* Table (for personality) */
+              .data-table {
+                     width: 100%;
+                     background: var(--card);
+                     border-radius: 10px;
+                     overflow: hidden;
+                     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+              }
+
+              .data-table th,
+              .data-table td {
+                     padding: 12px;
+                     text-align: center;
+                     border-bottom: 1px solid var(--border);
+                     font-size: 14px;
+              }
+
+              .data-table th {
+                     background: #3D4852;
+                     color: #fff;
+                     font-weight: 600;
+              }
+
+              .data-table td {
+                     color: var(--text);
+              }
+
+              .data-table tr:last-child td {
+                     border-bottom: none;
+              }
+
+              .stat-up {
+                     color: var(--green);
+                     font-weight: 700;
+              }
+
+              .stat-down {
+                     color: var(--red);
+                     font-weight: 700;
+              }
+
+              /* Form inputs */
+              .form-group {
+                     margin-bottom: 16px;
+              }
+
+              .form-label {
+                     font-size: 14px;
+                     font-weight: 600;
+                     margin-bottom: 6px;
+                     display: block;
+              }
+
+              .form-input {
+                     width: 100%;
+                     padding: 12px;
+                     border: 1px solid var(--border);
+                     border-radius: 8px;
+                     font-size: 15px;
+                     outline: none;
+              }
+
+              .form-input:focus {
+                     border-color: var(--blue);
+              }
+
+              .form-hint {
+                     font-size: 12px;
+                     color: var(--text-light);
+                     margin-top: 4px;
+              }
+
+              .btn-primary {
+                     background: var(--primary);
+                     color: #fff;
+                     border: none;
+                     padding: 12px 24px;
+                     border-radius: 8px;
+                     font-size: 15px;
+                     font-weight: 600;
+                     cursor: pointer;
+                     width: 100%;
+              }
+
+              .btn-primary:active {
+                     opacity: 0.9;
+              }
+
+              /* Stat bars */
+              .stat-bar {
+                     height: 6px;
+                     background: var(--bg);
+                     border-radius: 3px;
+                     overflow: hidden;
+                     margin-bottom: 8px;
+              }
+
+              .stat-bar-fill {
+                     height: 100%;
+                     border-radius: 3px;
+                     transition: width 0.3s;
+              }
+
+              /* Element Counter */
+              .element-calc {
+                     background: var(--card);
+                     border-radius: 10px;
+                     padding: 16px;
+                     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+                     margin-bottom: 12px;
+              }
+
+              .element-calc h3 {
+                     font-size: 16px;
+                     margin-bottom: 12px;
+              }
+
+              .element-selectors {
+                     display: flex;
+                     gap: 12px;
+                     margin-bottom: 16px;
+              }
+
+              .element-selectors select {
+                     flex: 1;
+                     padding: 10px;
+                     border-radius: 6px;
+                     border: 1px solid var(--border);
+              }
+
+              /* QQ Group Page */
+              .qq-page {
+                     text-align: center;
+                     padding: 40px 20px;
+              }
+
+              .qq-page i {
+                     font-size: 48px;
+                     color: var(--blue);
+                     margin-bottom: 16px;
+              }
+
+              .qq-page h2 {
+                     margin-bottom: 8px;
+              }
+
+              .qq-page p {
+                     color: var(--text-light);
+                     margin-bottom: 24px;
+              }
+
+              .qq-group-card {
+                     background: var(--card);
+                     border-radius: 12px;
+                     padding: 20px;
+                     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+                     max-width: 320px;
+                     margin: 0 auto 16px;
+              }
+
+              .qq-group-num {
+                     font-size: 24px;
+                     font-weight: 700;
+                     color: var(--blue);
+                     letter-spacing: 2px;
+              }
+
+              .qq-group-label {
+                     font-size: 13px;
+                     color: var(--text-light);
+                     margin-top: 4px;
+              }
+
+              /* More Page */
+              .more-menu {
+                     background: var(--card);
+                     border-radius: 10px;
+                     overflow: hidden;
+                     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+              }
+
+              .more-item {
+                     display: flex;
+                     align-items: center;
+                     padding: 14px 16px;
+                     border-bottom: 1px solid var(--border);
+                     cursor: pointer;
+              }
+
+              .more-item:last-child {
+                     border-bottom: none;
+              }
+
+              .more-item:active {
+                     background: #f8f8f8;
+              }
+
+              .more-item i {
+                     width: 24px;
+                     margin-right: 12px;
+                     color: var(--text-light);
+              }
+
+              .more-item span {
+                     flex: 1;
+                     font-size: 15px;
+              }
+
+              .more-item .arrow {
+                     color: var(--text-light);
+                     font-size: 12px;
+              }
+
+              /* Loading */
+              .loading {
+                     text-align: center;
+                     padding: 40px;
+                     color: var(--text-light);
+              }
+
+              .loading i {
+                     font-size: 24px;
+              }
+
+              /* Bottom Tabs */
+              .bottom-tabs {
+                     position: fixed;
+                     bottom: 0;
+                     left: 0;
+                     right: 0;
+                     background: var(--card);
+                     border-top: 1px solid var(--border);
+                     display: flex;
+                     padding: 6px 0 calc(6px + var(--safe-bottom));
+                     z-index: 300;
+              }
+
+              .tab-item {
+                     flex: 1;
+                     display: flex;
+                     flex-direction: column;
+                     align-items: center;
+                     gap: 2px;
+                     cursor: pointer;
+                     padding: 4px 0;
+                     color: var(--text-light);
+                     transition: color 0.2s;
+              }
+
+              .tab-item.active {
+                     color: var(--primary);
+              }
+
+              .tab-item i {
+                     font-size: 20px;
+              }
+
+               .tab-item span {
+                      font-size: 11px;
+                      font-weight: 500;
+               }
+
+               /* ===== 聊天挂饰 ===== */
+               .chat-orb {
+                      position: fixed; width: 52px; height: 52px;
+                      border-radius: 50%;
+                      background: linear-gradient(135deg, #FF6B35, #FF8A5C);
+                      box-shadow: 0 4px 18px rgba(255,107,53,0.45);
+                      cursor: grab; z-index: 9999;
+                      display: flex; align-items: center; justify-content: center;
+                      font-size: 22px; user-select: none;
+                      bottom: 100px; right: 16px;
+               }
+               .chat-orb:active { cursor: grabbing; }
+               .chat-orb::after { content:''; position:absolute; width:100%; height:100%; border-radius:50%; border:2px solid rgba(255,107,53,0.5); animation:pulse-ring 2s infinite; }
+               .chat-orb::before { content:''; position:absolute; width:100%; height:100%; border-radius:50%; border:2px solid rgba(255,107,53,0.3); animation:pulse-ring 2s 0.8s infinite; }
+               @keyframes pulse-ring { 0%{transform:scale(1);opacity:1} 100%{transform:scale(1.6);opacity:0} }
+               .chat-panel { position:fixed; width:340px; height:440px; background:#fff; border-radius:16px; box-shadow:0 8px 32px rgba(0,0,0,0.18); display:none; flex-direction:column; z-index:9998; overflow:hidden; border:1px solid #FEE5D9; }
+               .chat-panel.show { display:flex; }
+               .chat-panel-head { background:linear-gradient(135deg,#FF6B35,#FF8A5C); padding:10px 14px; color:#fff; font-weight:700; font-size:14px; display:flex; justify-content:space-between; align-items:center; flex-shrink:0; }
+               .chat-panel-close { background:none; border:none; color:#fff; cursor:pointer; font-size:16px; padding:0 4px; }
+               .chat-panel-msgs { flex:1; overflow-y:auto; padding:12px; display:flex; flex-direction:column; gap:8px; font-size:13px; background:#F5F5F5; }
+               .chat-bubble { max-width:85%; padding:8px 12px; border-radius:14px; line-height:1.5; word-break:break-word; font-size:13px; }
+               .chat-bubble.ai { align-self:flex-start; background:#FFF3ED; color:#333; border-bottom-left-radius:4px; }
+               .chat-bubble.user { align-self:flex-end; background:#e1f5fe; color:#333; border-bottom-right-radius:4px; }
+               .chat-panel-area { display:flex; padding:8px 10px; border-top:1px solid #FEE5D9; background:#fff; flex-shrink:0; }
+               .chat-panel-area input { flex:1; padding:8px 12px; border:1px solid #f0e0e8; border-radius:20px; outline:none; font-size:13px; background:#fafafa; }
+               .chat-panel-area input:focus { border-color:#FF6B35; }
+               .chat-panel-area button { background:#FF6B35; color:#fff; border:none; border-radius:50%; width:32px; height:32px; margin-left:8px; cursor:pointer; font-size:14px; flex-shrink:0; }
+               .chat-panel-area button:disabled { background:#ddd; cursor:not-allowed; }
+               .chat-settings { position:absolute; top:40px; left:0; right:0; bottom:48px; background:#fff; display:none; flex-direction:column; z-index:10; }
+               .chat-settings.show { display:flex; }
+               .chat-settings-head { background:linear-gradient(135deg,#FF6B35,#FF8A5C); padding:10px 14px; color:#fff; font-weight:700; font-size:14px; display:flex; justify-content:space-between; align-items:center; }
+               .api-key-row { display:flex; align-items:center; gap:6px; }
+               .api-key-row input { flex:1; padding:8px 12px; border:1px solid #f0e0e8; border-radius:8px; outline:none; font-size:13px; }
+               .api-key-row input:focus { border-color:#FF6B35; }
+               .api-key-row button { background:none; border:none; cursor:pointer; font-size:16px; padding:0 4px; }
+               .upload-btn-widget { width:100%; padding:6px 12px; border:1px solid #FF6B35; color:#FF6B35; background:#fff; border-radius:8px; font-size:12px; cursor:pointer; text-align:center; }
+               .upload-btn-wrapper { position:relative; overflow:hidden; }
+               .chat-chips { padding:6px 8px; display:flex; gap:6px; flex-wrap:wrap; border-top:1px solid #FEE5D9; background:#fff; }
+               .chat-chip { padding:4px 10px; border-radius:14px; border:1px solid #f0e0e8; background:#fff; font-size:11px; cursor:pointer; white-space:nowrap; color:#FF6B35; transition:all 0.15s; font-family:inherit; }
+               .chat-chip:hover { background:#FFF3ED; border-color:#FF6B35; }
+               .chat-chip:active { background:#FF8A5C; color:#fff; }
+               /* Data cards */
+               .game-card { align-self:flex-start; max-width:90%; background:#fff; border-radius:12px; padding:12px; box-shadow:0 2px 8px rgba(0,0,0,0.08); margin:4px 0; border:1px solid #FEE5D9; font-size:12px; }
+               .game-card .gc-title { font-size:15px; font-weight:700; margin-bottom:4px; }
+               .game-card .gc-sub { font-size:11px; color:#999; margin-bottom:8px; }
+               .game-card .gc-row { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:4px; }
+               .game-card .gc-stat { background:#FFF3ED; padding:3px 8px; border-radius:6px; font-weight:600; color:#555; }
+               .game-card .gc-tag { padding:2px 8px; border-radius:10px; font-size:11px; font-weight:600; }
+               .game-card .gc-tag.fire{background:#fbe9e7;color:#d84315}.game-card .gc-tag.water{background:#e3f2fd;color:#1565c0}
+               .game-card .gc-tag.grass{background:#e8f5e9;color:#2e7d32}.game-card .gc-tag.electric{background:#fff8e1;color:#f57f17}
+               .game-card .gc-tag.ice{background:#e0f7fa;color:#00838f}.game-card .gc-tag.dark{background:#eceff1;color:#37474f}
+               .game-card .gc-tag.light{background:#fffde7;color:#f9a825}.game-card .gc-tag.ground{background:#efebe9;color:#795548}
+               .game-card .gc-tag.wind{background:#e1f5fe;color:#0277bd}.game-card .gc-tag.dragon{background:#f3e5f5;color:#6a1b9a}
+               .game-card .gc-tag.normal{background:#f5f5f5;color:#8a8a8a}
+               .game-card .gc-partner { font-size:11px; color:#888; line-height:1.6; max-height:80px; overflow-y:auto; }
+               .game-card .gc-source { font-size:10px; color:#bbb; text-align:right; margin-top:6px; }
+               .game-card .gc-match { background:#D1FAE5; color:#059669; padding:4px 10px; border-radius:8px; font-weight:700; display:inline-block; }
+               .game-card .gc-nomatch { background:#FEE2E2; color:#DC2626; padding:4px 10px; border-radius:8px; font-weight:700; display:inline-block; }
+        </style>
+</head>
+
+<body>
+
+       <!-- ==================== HOME PAGE ==================== -->
+       <div id="home-page">
+              <div class="home-header">洛克广场</div>
+
+              <!-- Feature Grid 5x2 -->
+              <div class="feature-grid">
+                     <div class="feature-item" onclick="showPage('spirits')">
+                            <div class="ficon"><i class="fas fa-paw"></i></div>
+                            <div class="fname">宠物图鉴</div>
+                     </div>
+                     <div class="feature-item" onclick="showPage('skills')">
+                            <div class="ficon"><i class="fas fa-bolt"></i></div>
+                            <div class="fname">技能图鉴</div>
+                     </div>
+                     <div class="feature-item" onclick="showPage('elements')">
+                            <div class="ficon"><i class="fas fa-shield-alt"></i></div>
+                            <div class="fname">属性克制</div>
+                     </div>
+
+                     <div class="feature-item" onclick="showPage('eggs')">
+                            <div class="ficon"><i class="fas fa-egg"></i></div>
+                            <div class="fname red">孵蛋查询</div>
+                     </div>
+                     <div class="feature-item" onclick="showPage('personality')">
+                            <div class="ficon"><i class="fas fa-heart"></i></div>
+                            <div class="fname">性格</div>
+                     </div>
+                     <div class="feature-item" onclick="showPage('more')">
+                            <div class="ficon"><i class="fas fa-th-large"></i></div>
+                            <div class="fname">更多</div>
+                     </div>
+              </div>
+
+              <!-- Merchant Section -->
+              <div class="merchant-section" id="merchantSection"></div>
+       </div>
+
+       <!-- ==================== DETAIL PAGES ==================== -->
+
+       <!-- Spirits / Pets -->
+       <div class="detail-page" id="page-spirits">
+              <div class="detail-header">
+                     <button class="back-btn" onclick="goHome()"><i class="fas fa-arrow-left"></i></button>
+                     <div class="detail-title">宠物图鉴</div>
+              </div>
+              <div class="detail-body">
+                     <div class="search-box">
+                            <input type="text" id="spiritSearch" placeholder="请输入精灵名称、编号或首字母（如dm）">
+                            <button onclick="loadSpirits()"><i class="fas fa-search"></i></button>
+                     </div>
+                     <div class="filter-row">
+                            <select id="spiritElement" onchange="loadSpirits()">
+                                   <option value="">系别/形态</option>
+                                   <option value="火">火系</option>
+                                   <option value="水">水系</option>
+                                   <option value="草">草系</option>
+                                   <option value="电">电系</option>
+                                   <option value="冰">冰系</option>
+                                   <option value="暗">暗系</option>
+                                   <option value="光">光系</option>
+                                   <option value="地">地系</option>
+                                   <option value="风">风系</option>
+                                   <option value="龙">龙系</option>
+                            </select>
+                            <select id="spiritEggGroup" onchange="loadSpirits()">
+                                   <option value="">蛋组组别</option>
+                                   <option value="动物组">动物组</option>
+                                   <option value="拟人组">拟人组</option>
+                                   <option value="巨灵组">巨灵组</option>
+                                   <option value="魔力组">魔力组</option>
+                                   <option value="天空组">天空组</option>
+                                   <option value="两栖组">两栖组</option>
+                                   <option value="植物组">植物组</option>
+                                   <option value="大地组">大地组</option>
+                                   <option value="妖精组">妖精组</option>
+                                   <option value="昆虫组">昆虫组</option>
+                                   <option value="软体组">软体组</option>
+                                   <option value="机械组">机械组</option>
+                                   <option value="海洋组">海洋组</option>
+                                   <option value="龙组">龙组</option>
+                                   <option value="无法孵蛋">无法孵蛋</option>
+                            </select>
+                     </div>
+                     <div class="cards-grid" id="spiritList"></div>
+              </div>
+       </div>
+
+       <!-- Skills -->
+       <div class="detail-page" id="page-skills">
+              <div class="detail-header">
+                     <button class="back-btn" onclick="goHome()"><i class="fas fa-arrow-left"></i></button>
+                     <div class="detail-title">技能图鉴</div>
+              </div>
+              <div class="detail-body">
+                     <div class="search-box">
+                            <input type="text" id="skillSearch" placeholder="搜技能名称/效果（比如冻结）">
+                            <button onclick="loadSkills()"><i class="fas fa-search"></i></button>
+                     </div>
+                     <div class="filter-row">
+                            <select id="skillElement" onchange="loadSkills()">
+                                   <option value="">系别</option>
+                                   <option value="火">火</option>
+                                   <option value="水">水</option>
+                                   <option value="草">草</option>
+                                   <option value="电">电</option>
+                                   <option value="冰">冰</option>
+                                   <option value="暗">暗</option>
+                                   <option value="光">光</option>
+                                   <option value="地">地</option>
+                                   <option value="风">风</option>
+                                   <option value="龙">龙</option>
+                            </select>
+                            <select id="skillType" onchange="loadSkills()">
+                                   <option value="">类型</option>
+                                   <option value="状态">状态</option>
+                                   <option value="攻击">攻击</option>
+                                   <option value="防御">防御</option>
+                            </select>
+                            <select id="skillPowerSort" onchange="loadSkills()">
+                                   <option value="">威力排序</option>
+                                   <option value="desc">威力从高到低</option>
+                                   <option value="asc">威力从低到高</option>
+                            </select>
+                            <select id="skillPpSort" onchange="loadSkills()">
+                                   <option value="">能耗排序</option>
+                                   <option value="desc">能耗从高到低</option>
+                                   <option value="asc">能耗从低到高</option>
+                            </select>
+                     </div>
+                     <div id="skillList"></div>
+              </div>
+       </div>
+
+       <!-- Element Counters -->
+       <div class="detail-page" id="page-elements">
+              <div class="detail-header">
+                     <button class="back-btn" onclick="goHome()"><i class="fas fa-arrow-left"></i></button>
+                     <div class="detail-title">属性克制关系表</div>
+              </div>
+              <div class="detail-body">
+                     <div class="element-calc">
+                            <h3>属性效果计算器</h3>
+                            <div class="element-selectors">
+                                   <div style="flex:1">
+                                          <div class="form-label">主属性：</div>
+                                          <select id="mainElement" class="form-input" onchange="calcElement()">
+                                                 <option>普通</option>
+                                                 <option>火</option>
+                                                 <option>水</option>
+                                                 <option>草</option>
+                                                 <option>电</option>
+                                                 <option>冰</option>
+                                                 <option>光</option>
+                                                 <option>地</option>
+                                                 <option>翼</option>
+                                                 <option>龙</option>
+                                                 <option>武</option>
+                                                 <option>毒</option>
+                                                 <option>虫</option>
+                                                 <option>幽</option>
+                                                 <option>恶</option>
+                                                 <option>机械</option>
+                                                 <option>幻</option>
+                                                 <option>萌</option>
+                                          </select>
+                                   </div>
+                                   <div style="flex:1">
+                                          <div class="form-label">副属性：</div>
+                                          <select id="subElement" class="form-input" onchange="calcElement()">
+                                                 <option>无属性</option>
+                                                 <option>普通</option>
+                                                 <option>火</option>
+                                                 <option>水</option>
+                                                 <option>草</option>
+                                                 <option>电</option>
+                                                 <option>冰</option>
+                                                 <option>光</option>
+                                                 <option>地</option>
+                                                 <option>翼</option>
+                                                 <option>龙</option>
+                                                 <option>武</option>
+                                                 <option>毒</option>
+                                                 <option>虫</option>
+                                                 <option>幽</option>
+                                                 <option>恶</option>
+                                                 <option>机械</option>
+                                                 <option>幻</option>
+                                                 <option>萌</option>
+                                          </select>
+                                   </div>
+                            </div>
+                            <div id="elementResult"></div>
+                     </div>
+                     <div class="element-calc">
+                            <h3>属性克制法阵</h3>
+                            <div id="elementMatrix"
+                                   style="font-size:13px;color:var(--text-light);text-align:center;padding:20px;">
+                                   选择主属性后查看克制关系
+                            </div>
+                     </div>
+              </div>
+       </div>
+
+       <!-- Eggs -->
+       <div class="detail-page" id="page-eggs">
+              <div class="detail-header">
+                     <button class="back-btn" onclick="goHome()"><i class="fas fa-arrow-left"></i></button>
+                     <div class="detail-title">孵蛋查询</div>
+              </div>
+              <div class="detail-body">
+                     <!-- Tabs -->
+                     <div style="display:flex;gap:0;margin-bottom:12px;border-bottom:2px solid var(--border);">
+                            <button class="egg-tab active" onclick="switchEggTab('size')" id="eggTab-size"
+                                   style="flex:1;padding:10px;border:none;background:none;font-size:14px;font-weight:700;color:var(--text);border-bottom:2px solid var(--primary);cursor:pointer;"><i
+                                          class="fas fa-ruler"></i> 尺寸查询</button>
+                            <button class="egg-tab" onclick="switchEggTab('group')" id="eggTab-group"
+                                   style="flex:1;padding:10px;border:none;background:none;font-size:14px;font-weight:600;color:var(--text-light);border-bottom:2px solid transparent;cursor:pointer;"><i
+                                          class="fas fa-dna"></i> 蛋组配队</button>
+                     </div>
+
+                     <!-- Tab: Size Query -->
+                     <div id="eggTabContent-size">
+                            <div class="element-calc" style="margin-bottom:12px;">
+                                   <h3 style="display:flex;align-items:center;gap:6px;"><i class="fas fa-egg"
+                                                 style="color:var(--primary)"></i>
+                                          输入蛋的尺寸和重量</h3>
+                                   <div style="display:flex;gap:12px;margin-top:12px;">
+                                          <div style="flex:1;"><label class="form-label">尺寸 (m)</label><input
+                                                        type="number" class="form-input" id="eggDiam"
+                                                        placeholder="例如: 0.25" step="0.001" min="0"></div>
+                                          <div style="flex:1;"><label class="form-label">重量 (kg)</label><input
+                                                        type="number" class="form-input" id="eggWt"
+                                                        placeholder="例如: 5.5" step="0.01" min="0"></div>
+                                   </div>
+                                   <div style="margin-top:8px;display:flex;gap:8px;">
+                                          <button class="btn-primary" onclick="queryEggMatch()" id="eggQueryBtn"
+                                                 style="flex:1;"><i class="fas fa-search"></i> 查询</button>
+                                          <button class="btn-primary"
+                                                 onclick="document.getElementById('eggQueryResults').innerHTML=''"
+                                                 style="flex:0;width:auto;padding:12px 20px;background:#fff;color:var(--text);border:1px solid var(--border);">清空</button>
+                                   </div>
+                                   <div style="margin-top:8px;display:flex;flex-wrap:wrap;gap:6px;">
+                                          <span style="font-size:12px;color:var(--text-light);">示例：</span>
+                                          <button class="egg-sample" onclick="setEggSample(0.58,34.20)">0.58m /
+                                                 34.20kg</button>
+                                          <button class="egg-sample" onclick="setEggSample(0.25,5.26)">0.25m /
+                                                 5.26kg</button>
+                                          <button class="egg-sample" onclick="setEggSample(0.18,1.36)">0.18m /
+                                                 1.36kg</button>
+                                   </div>
+                            </div>
+                            <div id="eggQueryResults"></div>
+                     </div>
+
+                     <!-- Tab: Egg Group Pairing -->
+                     <div id="eggTabContent-group" style="display:none;">
+                            <div class="element-calc" style="margin-bottom:12px;">
+                                   <h3 style="display:flex;align-items:center;gap:6px;"><i class="fas fa-dna"
+                                                 style="color:var(--primary)"></i>
+                                          蛋组配对查询</h3>
+                                   <p style="font-size:12px;color:var(--text-light);margin-top:4px;">选择主精灵，查看蛋组和可配对伴侣
+                                   </p>
+
+                                   <!-- Main Spirit -->
+                                   <div class="form-group" style="margin-top:12px;position:relative;">
+                                          <label class="form-label">主精灵 <span
+                                                        style="color:var(--text-light);font-weight:400;font-size:12px;">输入名称选择</span></label>
+                                          <input type="text" class="form-input" id="mainSpiritInput"
+                                                 placeholder="输入精灵名称..." oninput="onMainSpiritInput(this.value)"
+                                                 autocomplete="off">
+                                          <div id="mainSpiritSuggest"
+                                                 style="display:none;position:absolute;top:100%;left:0;right:0;background:var(--card);border:1px solid var(--border);border-radius:8px;z-index:100;max-height:200px;overflow-y:auto;box-shadow:0 4px 12px rgba(0,0,0,0.1);">
+                                          </div>
+                                   </div>
+
+                                   <!-- Main Spirit Info -->
+                                   <div id="mainSpiritInfo"
+                                          style="display:none;background:var(--bg);border-radius:8px;padding:12px;margin-top:8px;">
+                                          <div style="display:flex;align-items:center;gap:10px;">
+                                                 <div id="mainSpiritImg"
+                                                        style="width:32px;height:32px;border-radius:6px;overflow:hidden;background:var(--card);display:flex;align-items:center;justify-content:center;">
+                                                        <i class="fas fa-dragon" style="color:#ccc;font-size:16px;"></i>
+                                                 </div>
+                                                 <div style="flex:1;">
+                                                        <div id="mainSpiritName"
+                                                               style="font-weight:700;font-size:15px;"></div>
+                                                        <div id="mainSpiritEggGroup"
+                                                               style="font-size:12px;color:var(--text-light);"></div>
+                                                 </div>
+                                                 <span id="mainSpiritCount"
+                                                        style="font-size:12px;background:var(--primary);color:#fff;padding:2px 10px;border-radius:100px;font-weight:600;"></span>
+                                          </div>
+                                   </div>
+
+                                   <!-- Partner Spirit -->
+                                   <div class="form-group" style="margin-top:12px;position:relative;">
+                                          <label class="form-label">副精灵 <span
+                                                        style="color:var(--text-light);font-weight:400;font-size:12px;">输入名称或悬停查看可配对列表</span></label>
+                                          <input type="text" class="form-input" id="partnerInput"
+                                                 placeholder="输入伴侣精灵名称..."
+                                                 oninput="onPartnerInput(this.value);updatePairBtn()"
+                                                 autocomplete="off">
+                                          <div id="partnerSuggest"
+                                                 style="display:none;position:absolute;top:100%;left:0;right:0;background:var(--card);border:1px solid var(--border);border-radius:8px;z-index:100;max-height:200px;overflow-y:auto;box-shadow:0 4px 12px rgba(0,0,0,0.1);">
+                                          </div>
+                                   </div>
+
+                                   <!-- Partner Preview (hover) -->
+                                   <div id="partnerPreview"
+                                          style="display:none;background:var(--bg);border-radius:8px;padding:12px;margin-top:4px;max-height:200px;overflow-y:auto;">
+                                          <div style="font-size:12px;color:var(--text-light);margin-bottom:6px;"><i
+                                                        class="fas fa-info-circle"></i>
+                                                 可配对的精灵（点击选择）</div>
+                                          <div id="partnerGrid"
+                                                 style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;">
+                                          </div>
+                                          <div id="partnerEmpty"
+                                                 style="display:none;text-align:center;padding:20px;color:var(--text-light);font-size:13px;">
+                                                 无法配对 -
+                                                 该精灵没有可繁殖的伙伴</div>
+                                   </div>
+
+                                   <!-- Partner Result -->
+                                   <div id="partnerResult" style="display:none;margin-top:8px;"></div>
+
+                                   <!-- One-click Check -->
+                                   <button class="btn-primary" id="pairCheckBtn" style="margin-top:12px;width:100%;"
+                                          disabled onclick="checkPairCompatibility()"><i class="fas fa-heart"></i>
+                                          一键查询配对</button>
+                            </div>
+                            <div id="pairResult"></div>
+                     </div>
+              </div>
+       </div>
+
+       <!-- Personality -->
+       <div class="detail-page" id="page-personality">
+              <div class="detail-header">
+                     <button class="back-btn" onclick="goHome()"><i class="fas fa-arrow-left"></i></button>
+                     <div class="detail-title">宠物性格修正表</div>
+              </div>
+              <div class="detail-body">
+                     <div class="data-table" style="overflow-x:auto;">
+                            <table style="width:100%;min-width:360px;">
+                                   <thead>
+                                          <tr>
+                                                 <th>性格</th>
+                                                 <th>增加</th>
+                                                 <th>减少</th>
+                                          </tr>
+                                   </thead>
+                                   <tbody id="personalityTable">
+                                          <tr>
+                                                 <td>聪明</td>
+                                                 <td class="stat-up">魔攻 ↑</td>
+                                                 <td class="stat-down">物攻 ↓</td>
+                                          </tr>
+                                          <tr>
+                                                 <td>专注</td>
+                                                 <td class="stat-up">魔攻 ↑</td>
+                                                 <td class="stat-down">物防 ↓</td>
+                                          </tr>
+                                          <tr>
+                                                 <td>偏执</td>
+                                                 <td class="stat-up">魔攻 ↑</td>
+                                                 <td class="stat-down">魔防 ↓</td>
+                                          </tr>
+                                          <tr>
+                                                 <td>冷静</td>
+                                                 <td class="stat-up">魔攻 ↑</td>
+                                                 <td class="stat-down">速度 ↓</td>
+                                          </tr>
+                                          <tr>
+                                                 <td>理性</td>
+                                                 <td class="stat-up">魔攻 ↑</td>
+                                                 <td class="stat-down">生命 ↓</td>
+                                          </tr>
+                                          <tr>
+                                                 <td>固执</td>
+                                                 <td class="stat-up">物攻 ↑</td>
+                                                 <td class="stat-down">魔攻 ↓</td>
+                                          </tr>
+                                          <tr>
+                                                 <td>大胆</td>
+                                                 <td class="stat-up">物攻 ↑</td>
+                                                 <td class="stat-down">物防 ↓</td>
+                                          </tr>
+                                          <tr>
+                                                 <td>调皮</td>
+                                                 <td class="stat-up">物攻 ↑</td>
+                                                 <td class="stat-down">魔防 ↓</td>
+                                          </tr>
+                                          <tr>
+                                                 <td>勇敢</td>
+                                                 <td class="stat-up">物攻 ↑</td>
+                                                 <td class="stat-down">速度 ↓</td>
+                                          </tr>
+                                          <tr>
+                                                 <td>逞强</td>
+                                                 <td class="stat-up">物攻 ↑</td>
+                                                 <td class="stat-down">生命 ↓</td>
+                                          </tr>
+                                          <tr>
+                                                 <td>警惕</td>
+                                                 <td class="stat-up">魔防 ↑</td>
+                                                 <td class="stat-down">物攻 ↓</td>
+                                          </tr>
+                                          <tr>
+                                                 <td>稳重</td>
+                                                 <td class="stat-up">物防 ↑</td>
+                                                 <td class="stat-down">魔攻 ↓</td>
+                                          </tr>
+                                          <tr>
+                                                 <td>乐天</td>
+                                                 <td class="stat-up">速度 ↑</td>
+                                                 <td class="stat-down">魔攻 ↓</td>
+                                          </tr>
+                                          <tr>
+                                                 <td>开朗</td>
+                                                 <td class="stat-up">生命 ↑</td>
+                                                 <td class="stat-down">魔攻 ↓</td>
+                                          </tr>
+                                          <tr>
+                                                 <td>保守</td>
+                                                 <td class="stat-up">魔防 ↑</td>
+                                                 <td class="stat-down">物攻 ↓</td>
+                                          </tr>
+                                          <tr>
+                                                 <td>悠闲</td>
+                                                 <td class="stat-up">物防 ↑</td>
+                                                 <td class="stat-down">物攻 ↓</td>
+                                          </tr>
+                                          <tr>
+                                                 <td>急躁</td>
+                                                 <td class="stat-up">速度 ↑</td>
+                                                 <td class="stat-down">物攻 ↓</td>
+                                          </tr>
+                                          <tr>
+                                                 <td>自大</td>
+                                                 <td class="stat-up">生命 ↑</td>
+                                                 <td class="stat-down">物攻 ↓</td>
+                                          </tr>
+                                   </tbody>
+                            </table>
+                     </div>
+              </div>
+       </div>
+
+       <!-- More -->
+       <div class="detail-page" id="page-more">
+              <div class="detail-header">
+                     <button class="back-btn" onclick="goHome()"><i class="fas fa-arrow-left"></i></button>
+                     <div class="detail-title">更多</div>
+              </div>
+              <div class="detail-body">
+                     <div class="feature-grid">
+                            <div class="feature-item" onclick="showPage('spirits')">
+                                   <div class="ficon"><i class="fas fa-paw"></i></div>
+                                   <div class="fname">宠物图鉴</div>
+                            </div>
+                            <div class="feature-item" onclick="showPage('skills')">
+                                   <div class="ficon"><i class="fas fa-bolt"></i></div>
+                                   <div class="fname">技能图鉴</div>
+                            </div>
+                            <div class="feature-item" onclick="showPage('elements')">
+                                   <div class="ficon"><i class="fas fa-shield-alt"></i></div>
+                                   <div class="fname">属性克制</div>
+                            </div>
+                            <div class="feature-item" onclick="showPage('eggs')">
+                                   <div class="ficon"><i class="fas fa-egg"></i></div>
+                                   <div class="fname red">孵蛋查询</div>
+                            </div>
+                     </div>
+              </div>
+       </div>
+
+       <!-- Spirit Detail -->
+       <div class="detail-page" id="page-spirit-detail">
+              <div class="detail-header">
+                     <button class="back-btn" onclick="hideSpiritDetail()"><i class="fas fa-arrow-left"></i></button>
+                     <div class="detail-title" id="spiritDetailName">精灵详情</div>
+              </div>
+              <div class="detail-body" id="spiritDetailBody"></div>
+        </div>
+
+        <!-- Skill Detail -->
+        <div class="detail-page" id="page-skill-detail">
+               <div class="detail-header">
+                      <button class="back-btn" onclick="hideSkillDetail()"><i class="fas fa-arrow-left"></i></button>
+                      <div class="detail-title" id="skillDetailName">技能详情</div>
+               </div>
+               <div class="detail-body" id="skillDetailBody"></div>
+        </div>
+
+        <!-- 聊天挂饰 -->
+        <div class="chat-orb" id="chatOrb">💬</div>
+        <div class="chat-panel" id="chatPanel">
+               <div class="chat-panel-head">
+                      <span id="chatPanelName">迪莫 💗</span>
+                      <div>
+                             <button class="chat-panel-close" onclick="showChatSettings()">⚙️</button>
+                             <button class="chat-panel-close" onclick="toggleChat()">✕</button>
+                      </div>
+               </div>
+               <div class="chat-panel-msgs" id="chatPanelMsgs"></div>
+               <div class="chat-settings" id="chatSettings">
+                      <div class="chat-settings-head"><span>🛠 设置</span><button class="chat-panel-close" onclick="showChatSettings()">✕</button></div>
+                      <div style="padding:12px;overflow-y:auto;flex:1;">
+                             <div style="font-size:12px;color:#999;margin-bottom:4px;">挂饰名字</div>
+                             <input type="text" id="chatName" placeholder="迪莫" style="width:100%;padding:6px 8px;border:1px solid #f0e0e8;border-radius:8px;font-size:13px;margin-bottom:10px;">
+                             <div style="font-size:12px;color:#999;margin-bottom:4px;">API Key</div>
+                             <div class="api-key-row">
+                                    <input type="password" id="chatApiKeyInput" placeholder="输入 API Key...">
+                                    <button id="chatApiKeyToggle" onclick="toggleChatApiVis()">👁️</button>
+                             </div>
+                             <div style="font-size:12px;color:#999;margin:10px 0 4px;">性格描述</div>
+                             <textarea id="chatPersonality" style="width:100%;height:50px;padding:6px 8px;border:1px solid #f0e0e8;border-radius:8px;font-size:12px;resize:none;">可爱、温柔、有点粘人，喜欢用语气词和颜文字</textarea>
+                             <div style="font-size:12px;color:#999;margin:10px 0 4px;">说话风格</div>
+                             <textarea id="chatStyle" style="width:100%;height:50px;padding:6px 8px;border:1px solid #f0e0e8;border-radius:8px;font-size:12px;resize:none;">短句为主，语气亲切，多用🥰💗✨之类颜文字</textarea>
+                             <div style="font-size:12px;color:#999;margin:10px 0 4px;">聊天语料（可选 .txt）</div>
+                             <div class="upload-btn-wrapper" style="margin-bottom:4px;">
+                                    <button class="upload-btn-widget">📂 上传语料文件</button>
+                                    <input type="file" id="corpusFileWidget" accept=".txt" onchange="handleCorpusUpload(event)" style="position:absolute;left:0;top:0;width:100%;height:100%;opacity:0;cursor:pointer;">
+                             </div>
+                             <div id="corpusStatus" style="font-size:11px;color:#4CAF50;margin-bottom:4px;"></div>
+                             <textarea id="chatCorpusWidget" placeholder="或直接粘贴语料..." style="width:100%;height:60px;padding:6px 8px;border:1px solid #f0e0e8;border-radius:8px;font-size:11px;resize:none;"></textarea>
+                             <button onclick="saveAllChatSettings()" style="width:100%;margin-top:10px;padding:8px;background:#ec407a;color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:13px;">💾 保存全部</button>
+                             <div id="chatSettingsStatus" style="font-size:11px;color:#4CAF50;margin-top:6px;text-align:center;"></div>
+                      </div>
+               </div>
+               <div class="chat-chips">
+                      <button class="chat-chip" onclick="chipFill('查询 ')">🐾查精灵</button>
+                      <button class="chat-chip" onclick="chipFill('技能 ')">⚡查技能</button>
+                      <button class="chat-chip" onclick="chipFill('配对 ')">👥配对</button>
+                      <button class="chat-chip" onclick="chipFill('蛋 ')">🥚蛋尺寸</button>
+               </div>
+               <div class="chat-panel-area">
+                      <input type="text" id="chatPanelInput" placeholder="说说话..." onkeydown="if(event.key==='Enter')chatSend()">
+                      <button id="chatPanelSendBtn" onclick="chatSend()">➤</button>
+               </div>
+        </div>
+
+        <!-- ==================== BOTTOM TABS ==================== -->
+       <div class="bottom-tabs">
+              <div class="tab-item active" onclick="switchTab(this, 'home')">
+                     <i class="fas fa-home"></i><span>首页</span>
+              </div>
+              <div class="tab-item" onclick="switchTab(this, 'spirits')">
+                     <i class="fas fa-paw"></i><span>图鉴</span>
+              </div>
+              <div class="tab-item" onclick="switchTab(this, 'discover')">
+                     <i class="fas fa-compass"></i><span>发现</span>
+              </div>
+              <div class="tab-item" onclick="switchTab(this, 'more')">
+                     <i class="fas fa-user"></i><span>我的</span>
+              </div>
+       </div>
+
+       <script>
+              const API = location.origin + '/api';
+              let merchantTimer = null;
+
+              function showPage(page) {
+                     document.querySelectorAll('.detail-page').forEach(p => p.classList.remove('show'));
+                     document.getElementById('home-page').style.display = 'none';
+                     document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+
+                     if (page === 'home') {
+                            document.getElementById('home-page').style.display = 'block';
+                            document.querySelectorAll('.tab-item')[0].classList.add('active');
+                            window.scrollTo({ top: 0 });
+                     } else {
+                            const el = document.getElementById('page-' + page);
+                            if (el) {
+                                   el.classList.add('show');
+                                   // Load data
+                                   if (page === 'spirits') loadSpirits();
+                                   if (page === 'skills') loadSkills();
+
+                                   if (page === 'eggs') clearEggQuery();
+                            }
+                     }
+              }
+
+              function goHome() {
+                     document.querySelectorAll('.detail-page').forEach(p => p.classList.remove('show'));
+                     document.getElementById('home-page').style.display = 'block';
+                     document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+                     document.querySelectorAll('.tab-item')[0].classList.add('active');
+              }
+
+              function switchTab(el, tab) {
+                     document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+                     el.classList.add('active');
+                     if (tab === 'home') goHome();
+                     else if (tab === 'spirits') showPage('spirits');
+                     else if (tab === 'discover') showPage('elements');
+                     else if (tab === 'more') showPage('more');
+              }
+
+              // ===== MERCHANT =====
+              async function loadMerchants() {
+                     try {
+                            const r = await fetch(`${API}/merchants/refresh`);
+                            const d = await r.json();
+                            if (d.code !== 0) return;
+                            const section = document.getElementById('merchantSection');
+                            const today = new Date().toISOString().split('T')[0];
+
+                            section.innerHTML = d.data.map(m => `
+      <div class="merchant-card" onclick="showMerchantDetail()">
+        <div class="merchant-header">
+          <div>
+            <div class="merchant-title">远行商人</div>
+            <div class="merchant-date">${today}</div>
+          </div>
+          <div class="merchant-badges">
+            <span class="badge badge-green">当前商品数 ${m.goods ? m.goods.length : 0}</span>
+            <span class="badge badge-blue">第 3 / 4 轮</span>
+          </div>
+        </div>
+        <div class="merchant-items" id="mitems-${m.id}">
+          ${(m.goods || []).map(g => `
+            <div class="mitem">
+              <div class="mitem-icon"><i class="fas fa-gem"></i></div>
+              <div class="mitem-info">
+                <div class="mitem-name">${g.item_name}</div>
+                <div class="mitem-time">08:00 - 00:00</div>
+              </div>
+              <div class="mitem-timer" id="mtimer-${m.id}-${g.id}"><i class="fas fa-hourglass-half"></i> ${m.remainingText || '00:00:00'}</div>
+            </div>
+          `).join('')}
+        </div>
+        <div class="merchant-rounds">
+          <div class="round-card">
+            <div class="round-label">第 1 轮<br>(已结束)</div>
+            <div class="round-items">
+              <div class="round-item"><i class="fas fa-gem"></i> 祝福项坠</div>
+            </div>
+          </div>
+          <div class="round-card">
+            <div class="round-label">第 2 轮<br>(已结束)</div>
+            <div class="round-items">
+              <div class="round-item"><i class="fas fa-egg"></i> 炫彩蛋</div>
+              <div class="round-item"><i class="fas fa-gem"></i> 黄石榴石</div>
+              <div class="round-item"><i class="fas fa-wind"></i> 光系粉尘</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    `).join('');
+                            startMerchantTimers(d.data);
+                     } catch (e) { console.error(e); }
+              }
+
+              function startMerchantTimers(merchants) {
+                     if (merchantTimer) clearInterval(merchantTimer);
+                     function update() {
+                            const now = Date.now();
+                            merchants.forEach(m => {
+                                   const last = new Date(m.last_refresh).getTime();
+                                   const next = last + m.refresh_interval * 1000;
+                                   const remaining = Math.max(0, Math.floor((next - now) / 1000));
+                                   const h = Math.floor(remaining / 3600);
+                                   const mi = Math.floor((remaining % 3600) / 60);
+                                   const s = remaining % 60;
+                                   const text = `${String(h).padStart(2, '0')}:${String(mi).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+                                   if (m.goods) {
+                                          m.goods.forEach(g => {
+                                                 const el = document.getElementById(`mtimer-${m.id}-${g.id}`);
+                                                 if (el) el.innerHTML = `<i class="fas fa-hourglass-half"></i> ${text}`;
+                                          });
+                                   }
+                            });
+                     }
+                     update();
+                     merchantTimer = setInterval(update, 1000);
+              }
+
+              // ===== SPIRITS =====
+              async function loadSpirits() {
+                     const name = document.getElementById('spiritSearch').value;
+                     const element = document.getElementById('spiritElement').value;
+                     const eggGroup = document.getElementById('spiritEggGroup').value;
+                     let url = `${API}/spirits`;
+                     const params = [];
+                     if (name) params.push(`name=${encodeURIComponent(name)}`);
+                     if (element) params.push(`element=${encodeURIComponent(element)}`);
+                     if (eggGroup) params.push(`egg_group=${encodeURIComponent(eggGroup)}`);
+                     if (params.length) url += '?' + params.join('&');
+                     try {
+                            const r = await fetch(url);
+                            const d = await r.json();
+                            const el = document.getElementById('spiritList');
+                            if (d.data.length === 0) { el.innerHTML = '<div class="loading">未找到精灵</div>'; return; }
+                            el.innerHTML = d.data.map((s, i) => {
+                                   const elMap = { '火': 'fire', '水': 'water', '草': 'grass', '电': 'electric', '冰': 'ice', '暗': 'dark', '光': 'light', '地': 'ground', '风': 'wind', '龙': 'dragon', '格斗': 'fighting', '幻': 'illusion', '普通': 'normal', '翼': 'wing', '虫': 'bug', '机械': 'steel', '钢': 'steel', '毒': 'poison', '幽': 'ghost', '萌': 'cute', '岩': 'rock', '超能': 'psychic' };
+                                   const cls = elMap[s.element] || '';
+                                   const imgHtml = s.image_url ? `<img src="${s.image_url}" alt="${s.name}" style="max-width:32px;max-height:32px;object-fit:contain;" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="card-img-fallback" style="display:none;align-items:center;justify-content:center;width:100%;height:100%;font-size:14px;color:#ccc;"><i class="fas fa-dragon"></i></div>` : `<i class="fas fa-dragon" style="font-size:14px;"></i>`;
+                                   const eggGroup = s.egg_group_qq || s.egg_group_lcx || '';
+                                   const eggTag = (eggGroup && eggGroup !== '无法孵蛋' && eggGroup !== '不能') ? `<span style="font-size:10px;color:var(--text-light);display:block;margin-top:3px;">🥚 ${eggGroup.slice(0, 12)}</span>` : '';
+                                   return `
+      <div class="card" onclick="showSpiritDetail(${s.id})">
+        <div class="card-img">${imgHtml}</div>
+        <div class="card-title">${s.name}</div>
+        <div class="card-sub">
+          <span class="tag tag-${cls}">${s.element}</span>
+          ${s.t_id ? `<span style="font-size:11px;color:var(--text-light);margin-left:4px;">#${s.t_id}</span>` : ''}
+          ${eggTag}
+        </div>
+      </div>`;
+                            }).join('');
+                     } catch (e) { console.error(e); }
+              }
+
+              // ===== SKILLS =====
+              async function loadSkills() {
+                     const name = document.getElementById('skillSearch').value;
+                     const element = document.getElementById('skillElement').value;
+                     const skillType = document.getElementById('skillType').value;
+                     const powerSort = document.getElementById('skillPowerSort').value;
+                     const ppSort = document.getElementById('skillPpSort').value;
+                     let url = `${API}/skills`;
+                     const params = [];
+                     if (name) params.push(`name=${encodeURIComponent(name)}`);
+                     if (element) params.push(`element=${encodeURIComponent(element)}`);
+                     if (skillType) params.push(`skill_type=${encodeURIComponent(skillType)}`);
+                     if (params.length) url += '?' + params.join('&');
+                     try {
+                            const r = await fetch(url);
+                            const d = await r.json();
+                            const el = document.getElementById('skillList');
+                            if (d.data.length === 0) { el.innerHTML = '<div class="loading">未找到技能</div>'; return; }
+                            // Client-side sort
+                            let data = d.data;
+                            if (powerSort) {
+                                   data = [...data].sort((a, b) => {
+                                          const ap = parseInt(a.power) || 0;
+                                          const bp = parseInt(b.power) || 0;
+                                          return powerSort === 'desc' ? bp - ap : ap - bp;
+                                   });
+                            }
+                            if (ppSort) {
+                                   data = [...data].sort((a, b) => {
+                                          const ap = parseInt(a.pp) || 0;
+                                          const bp = parseInt(b.pp) || 0;
+                                          return ppSort === 'desc' ? bp - ap : ap - bp;
+                                   });
+                            }
+                            el.innerHTML = data.map(s => {
+                                   const elMap = { '火': 'fire', '水': 'water', '草': 'grass', '电': 'electric', '冰': 'ice', '暗': 'dark', '光': 'light', '地': 'ground', '风': 'wind', '龙': 'dragon', '格斗': 'fighting', '幻': 'illusion', '普通': 'normal', '翼': 'wing', '虫': 'bug', '机械': 'steel', '钢': 'steel', '毒': 'poison', '幽': 'ghost', '萌': 'cute', '岩': 'rock', '超能': 'psychic' };
+                                   const cls = elMap[s.element] || '';
+                                   return `
+      <div class="skill-card ${cls}" onclick="showSkillDetail(${s.id})">
+        <div class="skill-header">
+          <span class="skill-name">${s.name}</span>
+          <span class="skill-power">⚡${s.power || '-'}</span>
+        </div>
+        <div class="skill-info"><span class="tag tag-${cls}">${s.element}</span> · ${s.type} · PP:${s.pp || '-'}</div>
+        <div style="font-size:11px;color:var(--text-light);margin-top:4px;line-height:1.4;">${(s.description || '').slice(0, 50)}${(s.description || '').length > 50 ? '...' : ''}</div>
+      </div>`;
+                            }).join('');
+                     } catch (e) { console.error(e); }
+              }
+
+
+
+              // ===== EGG QUERY =====
+              let spiritImageMap = null;
+
+              async function getSpiritImageMap() {
+                     if (spiritImageMap) return spiritImageMap;
+                     spiritImageMap = {};
+                     try {
+                            const r = await fetch(`${API}/spirits`);
+                            const d = await r.json();
+                            if (d.code === 0) {
+                                   d.data.forEach(s => { spiritImageMap[s.name] = s.image_url || ''; });
+                            }
+                     } catch (e) { }
+                     return spiritImageMap;
+              }
+
+              async function queryEggMatch() {
+                     const d = parseFloat(document.getElementById('eggDiam').value);
+                     const w = parseFloat(document.getElementById('eggWt').value);
+                     const el = document.getElementById('eggQueryResults');
+
+                     if (isNaN(d) || d <= 0 || isNaN(w) || w <= 0) {
+                            el.innerHTML = '<div style="text-align:center;padding:30px;color:var(--text-light);">请输入有效的尺寸和重量</div>';
+                            return;
+                     }
+
+                     document.getElementById('eggQueryBtn').disabled = true;
+                     document.getElementById('eggQueryBtn').innerHTML = '<i class="fas fa-spinner fa-spin"></i> 查询中...';
+
+                     try {
+                            const [imgMap, result] = await Promise.all([
+                                   getSpiritImageMap(),
+                                   fetch(`${API}/egg-query?diameter=${d}&weight=${w}`).then(r => r.json())
+                            ]);
+
+                            if (result.code !== 0 || !result.data || result.data.length === 0) {
+                                   el.innerHTML = '<div style="text-align:center;padding:30px;color:var(--text-light);">未匹配到精灵，请尝试其他尺寸/重量</div>';
+                                   return;
+                            }
+
+                            const badges = { '精确匹配': 'badge badge-exact', '范围匹配': 'badge badge-range', '部分匹配': 'badge badge-partial', '近似匹配': 'badge badge-近似' };
+
+                            el.innerHTML = `
+      <div style="margin-bottom:8px;font-size:13px;color:var(--text-light);">共找到 ${result.data.length} 个候选</div>
+      ${result.data.map(p => {
+                                   const img = imgMap[p.pet_name] || '';
+                                   const imgHtml = img ? `<img src="${img}" alt="${p.pet_name}" style="width:24px;height:24px;border-radius:4px;object-fit:contain;background:var(--bg);">` : `<i class="fas fa-egg" style="font-size:12px;color:#999"></i>`;
+                                   return `
+        <div class="egg-result-card" onclick="navigateToSpirit('${p.pet_name}')">
+          <div class="egg-result-icon">${imgHtml}</div>
+          <div class="egg-result-info">
+            <div class="egg-result-name">${p.pet_name}</div>
+            <div class="egg-result-range">尺寸: ${p.diameter_min.toFixed(2)}~${p.diameter_max.toFixed(2)}m · 重量: ${p.weight_min.toFixed(2)}~${p.weight_max.toFixed(2)}kg</div>
+          </div>
+          <span class="${badges[p.matchType] || 'badge badge-近似'}">${p.matchType} ${p.score}%</span>
+        </div>`;
+                            }).join('')}
+    `;
+                     } catch (e) {
+                            el.innerHTML = '<div style="text-align:center;padding:30px;color:var(--text-light);">查询失败，请稍后重试</div>';
+                     }
+
+                     document.getElementById('eggQueryBtn').disabled = false;
+                     document.getElementById('eggQueryBtn').innerHTML = '<i class="fas fa-search"></i> 查询';
+              }
+
+              function navigateToSpirit(name) {
+                     // Find spirit by name and show detail
+                     if (spiritImageMap) {
+                            // Fetch spirits to find ID
+                            fetch(`${API}/spirits?name=${encodeURIComponent(name)}`).then(r => r.json()).then(d => {
+                                   if (d.code === 0 && d.data.length > 0) {
+                                          showSpiritDetail(d.data[0].id);
+                                   }
+                            });
+                     }
+              }
+
+              function setEggSample(d, w) {
+                     document.getElementById('eggDiam').value = d;
+                     document.getElementById('eggWt').value = w;
+                     queryEggMatch();
+              }
+
+              function clearEggQuery() {
+                     document.getElementById('eggDiam').value = '';
+                     document.getElementById('eggWt').value = '';
+                     document.getElementById('eggQueryResults').innerHTML = '';
+              }
+
+              // ===== EGG GROUP PAIRING =====
+              let allSpiritsData = null;
+              let eggPairMain = null; // { name, eggGroup, image }
+
+              async function loadAllSpirits() {
+                     if (allSpiritsData) return allSpiritsData;
+                     const r = await fetch(`${API}/spirits`);
+                     const d = await r.json();
+                     if (d.code === 0) allSpiritsData = d.data;
+                     return allSpiritsData;
+              }
+
+              function switchEggTab(tab) {
+                     if (tab === 'size') {
+                            document.getElementById('eggTabContent-size').style.display = 'block';
+                            document.getElementById('eggTabContent-group').style.display = 'none';
+                            document.getElementById('eggTab-size').style.color = 'var(--text)';
+                            document.getElementById('eggTab-size').style.borderBottomColor = 'var(--primary)';
+                            document.getElementById('eggTab-size').style.fontWeight = '700';
+                            document.getElementById('eggTab-group').style.color = 'var(--text-light)';
+                            document.getElementById('eggTab-group').style.borderBottomColor = 'transparent';
+                            document.getElementById('eggTab-group').style.fontWeight = '600';
+                     } else {
+                            document.getElementById('eggTabContent-size').style.display = 'none';
+                            document.getElementById('eggTabContent-group').style.display = 'block';
+                            document.getElementById('eggTab-group').style.color = 'var(--text)';
+                            document.getElementById('eggTab-group').style.borderBottomColor = 'var(--primary)';
+                            document.getElementById('eggTab-group').style.fontWeight = '700';
+                            document.getElementById('eggTab-size').style.color = 'var(--text-light)';
+                            document.getElementById('eggTab-size').style.borderBottomColor = 'transparent';
+                            document.getElementById('eggTab-size').style.fontWeight = '600';
+                            if (!allSpiritsData) loadAllSpirits();
+                            if (!eggPairMain) showPartnerPreview();
+
+                            document.getElementById("pairResult").innerHTML = "";
+
+                     }
+              }
+
+              // Autocomplete helpers
+              let acTimeout = null;
+              function showSuggestions(inputId, suggestId, spirits, onSelect) {
+                     const input = document.getElementById(inputId);
+                     const suggest = document.getElementById(suggestId);
+                     const q = input.value.trim().toLowerCase();
+                     if (!q) { suggest.style.display = 'none'; return; }
+                     const matches = spirits.filter(s => s.name.toLowerCase().includes(q)).slice(0, 8);
+                     if (matches.length === 0) { suggest.style.display = 'none'; return; }
+                     suggest.innerHTML = matches.map(s => {
+                            const egg = s.egg_group_qq || s.egg_group_lcx || '';
+                            const img = s.image_url ? `<img src="${s.image_url}" alt="">` : `<i class="fas fa-dragon" style="font-size:16px;color:#ccc"></i>`;
+                            return `<div class="ac-item" onclick="selectMainSpiritSuggest('${s.name.replace(/'/g, "\\'")}')">${img}<span class="ac-name">${s.name}</span><span class="ac-egg">${egg.slice(0, 20)}</span></div>`;
+                     }).join('');
+                     suggest.style.display = 'block';
+              }
+
+              async function onMainSpiritInput(q) {
+                     if (!allSpiritsData) await loadAllSpirits();
+                     if (acTimeout) clearTimeout(acTimeout);
+                     acTimeout = setTimeout(() => {
+                            const suggest = document.getElementById('mainSpiritSuggest');
+                            const query = q.trim().toLowerCase();
+                            if (!query) { suggest.style.display = 'none'; return; }
+                            const matches = allSpiritsData.filter(s => s.name.toLowerCase().includes(query)).slice(0, 8);
+                            if (matches.length === 0) { suggest.style.display = 'none'; return; }
+                            suggest.innerHTML = matches.map(s => {
+                                   const egg = s.egg_group_qq || s.egg_group_lcx || '';
+                                   const img = s.image_url ? `<img src="${s.image_url}" alt="">` : `<i class="fas fa-dragon" style="font-size:16px;color:#ccc"></i>`;
+                                   const eggShow = (egg && egg !== '无法孵蛋' && egg !== '不能') ? egg : '无可繁殖蛋组';
+                                   return `<div class="ac-item" onclick="selectMainSpirit('${s.name.replace(/'/g, "\\'")}','${egg.replace(/'/g, "\\'")}','${(s.image_url || '').replace(/'/g, "\\'")}')">${img}<span class="ac-name">${s.name}</span><span class="ac-egg">${eggShow}</span></div>`;
+                            }).join('');
+                            suggest.style.display = 'block';
+                     }, 150);
+              }
+
+              function selectMainSpirit(name) {
+                     document.getElementById('mainSpiritInput').value = name;
+                     document.getElementById('mainSpiritSuggest').style.display = 'none';
+
+                     const s = allSpiritsData.find(x => x.name === name);
+                     if (!s) return;
+
+                     const egg = s.egg_group_qq || s.egg_group_lcx || '';
+                     const eggClean = (egg && egg !== '无法孵蛋' && egg !== '不能') ? egg : '';
+
+                     eggPairMain = { name: s.name, eggGroup: eggClean, image: s.image_url || '' };
+
+                     // Show main spirit info
+                     const imgHtml = s.image_url ? `<img src="${s.image_url}" style="width:40px;height:40px;object-fit:contain;border-radius:4px;">` : `<i class="fas fa-dragon" style="font-size:20px;color:#ccc"></i>`;
+                     document.getElementById('mainSpiritImg').innerHTML = imgHtml;
+                     document.getElementById('mainSpiritName').textContent = s.name;
+
+                     if (eggClean) {
+                            const groups = eggClean.split(',').map(g => g.trim()).filter(Boolean);
+                            document.getElementById('mainSpiritEggGroup').innerHTML = groups.map(g => `<span style="display:inline-block;background:var(--primary-light);color:var(--primary-dark);padding:1px 8px;border-radius:100px;font-size:11px;margin:2px;">🥚 ${g}</span>`).join('');
+                            const partners = allSpiritsData.filter(x => {
+                                   if (x.name === s.name) return false;
+                                   const xEgg = x.egg_group_qq || x.egg_group_lcx || '';
+                                   return groups.some(g => xEgg.includes(g));
+                            });
+                            if (partners.length === 0) {
+                                   document.getElementById('mainSpiritCount').innerHTML = '<span style="color:var(--accent-red);font-size:12px;font-weight:600;">不可配对 - 无同组伴侣</span>';
+                            } else {
+                                   document.getElementById('mainSpiritCount').textContent = `${partners.length} 个伴侣`;
+                            }
+                     } else {
+                            document.getElementById('mainSpiritEggGroup').innerHTML = '<span style="color:var(--accent-red);font-size:12px;font-weight:600;">不可配对 - 该精灵无法孵蛋</span>';
+                            document.getElementById('mainSpiritCount').textContent = '';
+                     }
+                     document.getElementById('mainSpiritInfo').style.display = 'block';
+
+                     showPartnerPreview();
+
+              }
+
+              function selectMainSpiritSuggest(name) {
+                     selectMainSpirit(name);
+              }
+
+              function formatEggGroupStr(s) {
+                     return s.egg_group_qq || s.egg_group_lcx || '';
+              }
+
+              function showPartnerPreview() {
+                     const preview = document.getElementById('partnerPreview');
+                     const grid = document.getElementById('partnerGrid');
+                     const empty = document.getElementById('partnerEmpty');
+
+                     if (!eggPairMain || !eggPairMain.eggGroup) {
+                            preview.style.display = 'none';
+                            return;
+                     }
+
+                     const groups = eggPairMain.eggGroup.split(',').map(g => g.trim()).filter(Boolean);
+                     const partners = allSpiritsData.filter(x => {
+                            if (x.name === eggPairMain.name) return false;
+                            const xEgg = formatEggGroupStr(x);
+                            return groups.some(g => xEgg.includes(g));
+                     });
+
+                     if (partners.length === 0) {
+                            preview.style.display = 'block';
+                            grid.innerHTML = '';
+                            empty.style.display = 'block';
+                            return;
+                     }
+
+                     empty.style.display = 'none';
+                     preview.style.display = 'block';
+                     grid.innerHTML = partners.slice(0, 12).map(p => {
+                            const img = p.image_url ? `<img src="${p.image_url}" style="width:100%;height:100%;object-fit:contain;" onerror="this.outerHTML='<i class=\\'fas fa-dragon\\' style=\\'font-size:18px;color:#ccc\\'></i>'">` : `<i class="fas fa-dragon" style="font-size:18px;color:#ccc"></i>`;
+                            return `<div style="cursor:pointer;text-align:center;" onclick="selectPartner('${p.name.replace(/'/g, "\\'")}')" title="${p.name}">
+      <div style="width:100%;aspect-ratio:1;background:var(--card);border-radius:6px;display:flex;align-items:center;justify-content:center;overflow:hidden;">${img}</div>
+      <div style="font-size:10px;color:var(--text);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${p.name}</div>
+    </div>`;
+                     }).join('');
+                     grid.innerHTML += partners.length > 12 ? `<div style="display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--text-light);">+${partners.length - 12} 更多</div>` : '';
+              }
+
+              async function onPartnerInput(q) {
+                     if (!allSpiritsData) await loadAllSpirits();
+                     if (acTimeout) clearTimeout(acTimeout);
+                     acTimeout = setTimeout(() => {
+                            const suggest = document.getElementById('partnerSuggest');
+                            const query = q.trim().toLowerCase();
+                            if (!query) { suggest.style.display = 'none'; return; }
+
+                            // Only show spirits compatible with main
+                            let candidates = allSpiritsData;
+                            if (eggPairMain && eggPairMain.eggGroup) {
+                                   const groups = eggPairMain.eggGroup.split(',').map(g => g.trim()).filter(Boolean);
+                                   candidates = allSpiritsData.filter(x => {
+                                          if (x.name === eggPairMain.name) return false;
+                                          const xEgg = formatEggGroupStr(x);
+                                          return groups.some(g => xEgg.includes(g));
+                                   });
+                            }
+
+                            const matches = candidates.filter(s => s.name.toLowerCase().includes(query)).slice(0, 8);
+                            if (matches.length === 0) { suggest.style.display = 'none'; return; }
+                            suggest.innerHTML = matches.map(s => {
+                                   const egg = formatEggGroupStr(s);
+                                   const img = s.image_url ? `<img src="${s.image_url}" alt="">` : `<i class="fas fa-dragon" style="font-size:16px;color:#ccc"></i>`;
+                                   return `<div class="ac-item" onclick="selectPartner('${s.name.replace(/'/g, "\\'")}')">${img}<span class="ac-name">${s.name}</span><span class="ac-egg">${egg.slice(0, 20)}</span></div>`;
+                            }).join('');
+                            suggest.style.display = 'block';
+                     }, 150);
+              }
+
+
+
+              function selectPartner(name) {
+                     document.getElementById('partnerInput').value = name;
+                     document.getElementById('partnerSuggest').style.display = 'none';
+                     document.getElementById('pairResult').innerHTML = '';
+                     updatePairBtn();
+              }
+
+              function updatePairBtn() {
+                     const btn = document.getElementById('pairCheckBtn');
+                     const val = document.getElementById('partnerInput').value.trim();
+                     btn.disabled = !val;
+                     btn.style.opacity = val ? '1' : '0.5';
+                     btn.style.cursor = val ? 'pointer' : 'not-allowed';
+              }
+
+              function checkPairCompatibility() {
+                     const partnerName = document.getElementById('partnerInput').value.trim();
+                     const result = document.getElementById('pairResult');
+
+                     if (!eggPairMain || !eggPairMain.eggGroup) {
+                            result.innerHTML = '<div style="text-align:center;padding:20px;color:#DC2626;font-weight:700;">主精灵无法孵蛋，没有可配对的伴侣</div>';
+                            return;
+                     }
+                     if (!partnerName) {
+                            result.innerHTML = '<div style="text-align:center;padding:20px;color:#D97706;font-weight:700;">请在副精灵框中输入精灵名称</div>';
+                            return;
+                     }
+
+                     const partner = allSpiritsData.find(x => x.name === partnerName);
+                     if (!partner) {
+                            result.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text-light);">未找到该精灵</div>';
+                            return;
+                     }
+
+                     const pEgg = formatEggGroupStr(partner);
+                     const groups = eggPairMain.eggGroup.split(',').map(g => g.trim()).filter(Boolean);
+                     const canBreed = groups.some(g => pEgg.includes(g));
+
+                     if (canBreed) {
+                            result.innerHTML = `
+      <div class="pair-match"><i class="fas fa-heart" style="margin-right:6px;"></i> 可配对！</div>
+      <div style="display:flex;align-items:center;gap:12px;margin-top:12px;padding:12px;background:var(--card);border-radius:10px;">
+        <div style="width:32px;height:32px;border-radius:50%;overflow:hidden;background:var(--bg);display:flex;align-items:center;justify-content:center;">
+          ${eggPairMain.image ? `<img src="${eggPairMain.image}" style="width:32px;height:32px;object-fit:contain;">` : `<i class="fas fa-dragon" style="color:#ccc;font-size:14px;"></i>`}
+        </div>
+        <i class="fas fa-heart" style="color:#059669;"></i>
+        <div style="width:32px;height:32px;border-radius:50%;overflow:hidden;background:var(--bg);display:flex;align-items:center;justify-content:center;">
+          ${partner.image_url ? `<img src="${partner.image_url}" style="width:32px;height:32px;object-fit:contain;">` : `<i class="fas fa-dragon" style="color:#ccc;font-size:14px;"></i>`}
+        </div>
+        <div style="flex:1;font-size:13px;color:var(--text-light);">${eggPairMain.name} + ${partner.name} 同属 <strong>${eggPairMain.eggGroup}</strong> 蛋组</div>
+      </div>`;
+                     } else {
+                            result.innerHTML = `
+      <div class="pair-nomatch"><i class="fas fa-times-circle" style="margin-right:6px;"></i> 不可配对</div>
+      <div style="text-align:center;padding:12px;font-size:13px;color:var(--text-light);">${eggPairMain.name} 与 ${partner.name} 不在同一蛋组</div>`;
+                     }
+              }
+              const elementMatrix = {
+                     "光": { "strong": ["幽", "恶"], "weak": ["草", "冰"], "resist": ["幻", "恶"], "vulnerable": ["幽", "草"] },
+                     "冰": { "strong": ["草", "地", "龙", "翼"], "weak": ["火", "冰", "机械"], "resist": ["光", "冰", "水"], "vulnerable": ["地", "机械", "武", "火"] },
+                     "地": { "strong": ["火", "冰", "电", "毒"], "weak": ["草", "武"], "resist": ["普通", "毒", "火", "电", "翼"], "vulnerable": ["冰", "机械", "武", "水", "草"] },
+                     "幻": { "strong": ["毒", "武"], "weak": ["光", "机械", "幻"], "resist": ["幻", "武"], "vulnerable": ["幽", "虫"] },
+                     "幽": { "strong": ["光", "幽", "幻"], "weak": ["普通", "恶"], "resist": ["普通", "武", "毒", "虫"], "vulnerable": ["光", "幽", "恶"] },
+                     "恶": { "strong": ["毒", "萌", "幽"], "weak": ["光", "武", "恶"], "resist": ["幽", "恶"], "vulnerable": ["光", "武", "萌", "虫"] },
+                     "普通": { "strong": [], "weak": ["地", "幽", "机械"], "resist": ["幽"], "vulnerable": ["武"] },
+                     "机械": { "strong": ["地", "冰", "萌"], "weak": ["火", "水", "电", "机械"], "resist": ["冰", "幻", "普通", "机械", "毒", "翼", "草", "萌", "虫", "龙"], "vulnerable": ["武", "水", "火"] },
+                     "武": { "strong": ["普通", "地", "冰", "恶", "机械"], "weak": ["毒", "虫", "翼", "萌", "幽", "幻"], "resist": ["地", "恶", "虫"], "vulnerable": ["幻", "翼", "萌"] },
+                     "毒": { "strong": ["草", "萌"], "weak": ["地", "毒", "幽", "机械"], "resist": ["武", "毒", "草", "萌", "虫"], "vulnerable": ["地", "幻", "恶"] },
+                     "水": { "strong": ["火", "地", "机械"], "weak": ["草", "冰", "龙"], "resist": ["机械", "火"], "vulnerable": ["电", "草"] },
+                     "火": { "strong": ["草", "冰", "虫", "机械"], "weak": ["水", "地", "龙"], "resist": ["冰", "机械", "草", "萌", "虫"], "vulnerable": ["地", "水"] },
+                     "电": { "strong": ["水", "翼"], "weak": ["草", "地", "龙", "电"], "resist": ["机械", "电", "翼"], "vulnerable": ["地"] },
+                     "翼": { "strong": ["草", "虫", "武"], "weak": ["地", "龙", "电", "机械"], "resist": ["武", "草", "虫"], "vulnerable": ["冰", "电"] },
+                     "草": { "strong": ["水", "光", "地"], "weak": ["火", "龙", "毒", "虫", "翼", "机械"], "resist": ["光", "地", "水", "电"], "vulnerable": ["冰", "毒", "火", "翼", "虫"] },
+                     "萌": { "strong": ["龙", "武", "恶"], "weak": ["火", "毒", "机械"], "resist": ["武", "虫"], "vulnerable": ["恶", "机械", "毒"] },
+                     "虫": { "strong": ["草", "恶", "幻"], "weak": ["火", "毒", "武", "翼", "萌", "幽", "机械"], "resist": ["武", "草"], "vulnerable": ["火", "翼"] },
+                     "龙": { "strong": ["龙"], "weak": ["机械"], "resist": ["水", "火", "电", "翼", "草"], "vulnerable": ["冰", "萌", "龙"] }
+              };
+
+              function calcElement() {
+                     const main = document.getElementById('mainElement').value;
+                     const data = elementMatrix[main];
+                     if (!data) return;
+                     const el = document.getElementById('elementResult');
+                     let html = '<div style="margin-top:12px;">';
+                     html += '<div style="margin-bottom:12px;"><strong style="color:var(--green)">作为攻击方时 2倍效果：</strong> ' + (data.strong.length ? data.strong.join('、') : '无') + '</div>';
+                     html += '<div style="margin-bottom:12px;"><strong style="color:var(--red)">作为攻击方时 1/2倍效果：</strong> ' + (data.weak.length ? data.weak.join('、') : '无') + '</div>';
+                     html += '<div style="margin-bottom:12px;"><strong style="color:var(--green)">作为防守方时 抵抗：</strong> ' + (data.resist.length ? data.resist.join('、') : '无') + '</div>';
+                     html += '<div><strong style="color:var(--red)">作为防守方时 受到2倍伤害：</strong> ' + (data.vulnerable.length ? data.vulnerable.join('、') : '无') + '</div>';
+                     html += '</div>';
+                     el.innerHTML = html;
+
+                     const mx = document.getElementById('elementMatrix');
+                     mx.innerHTML = `<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px;">
+    ${Object.keys(elementMatrix).map(e => {
+                            const isStrong = data.strong.includes(e);
+                            const isWeak = data.weak.includes(e);
+                            const bg = isStrong ? 'background:#E8F5E9;color:#10B981;' : isWeak ? 'background:#FEE2E2;color:#EF4444;' : 'background:var(--bg);color:var(--text-light);';
+                            return `<div style="padding:8px;border-radius:6px;font-size:13px;${bg}font-weight:600;">${e}</div>`;
+                     }).join('')}
+  </div>`;
+              }
+
+              // ===== SPIRIT DETAIL =====
+async function showSpiritDetail(id) {
+                      const page = document.getElementById('page-spirit-detail');
+                      document.querySelectorAll('.detail-page').forEach(p => p.classList.remove('show'));
+                      page.classList.add('show');
+                      document.getElementById('spiritDetailName').textContent = '加载中...';
+                      document.getElementById('spiritDetailBody').innerHTML = '<div class="loading"><i class="fas fa-spinner fa-spin"></i> 加载中...</div>';
+                      try {
+                             const [r1, r2] = await Promise.all([fetch(`${API}/spirits/${id}`), fetch(`${API}/spirits/${id}/skills`)]);
+                             const d = await r1.json();
+                             const sk = await r2.json();
+                             if (d.code !== 0) return;
+                             const s = d.data;
+                             const skills = sk.code === 0 ? sk.data : [];
+                             document.getElementById('spiritDetailName').textContent = s.name;
+                             const elMap = { '火': 'fire', '水': 'water', '草': 'grass', '电': 'electric', '冰': 'ice', '暗': 'dark', '光': 'light', '地': 'ground', '风': 'wind', '龙': 'dragon', '格斗': 'fighting', '幻': 'illusion', '普通': 'normal', '翼': 'wing', '虫': 'bug', '机械': 'steel', '钢': 'steel', '毒': 'poison', '幽': 'ghost', '萌': 'cute', '岩': 'rock', '超能': 'psychic' };
+                             const tagEl = elMap[s.element] || '';
+                             const statColors = { hp: '#FF5959', attack: '#F5AC78', defense: '#FAE078', special_attack: '#9DB7F5', special_defense: '#A7DB8D', speed: '#FA92B2' };
+                             const statNames = { hp: '生命', attack: '物攻', defense: '物防', special_attack: '特攻', special_defense: '特防', speed: '速度' };
+                             const fields = ['hp', 'attack', 'defense', 'special_attack', 'special_defense', 'speed'];
+                             const maxStat = Math.max(...fields.map(f => parseInt(s[f]) || 0), 1);
+                             const statsHtml = fields.map(f => {
+                                    const val = parseInt(s[f]) || 0;
+                                    const pct = (val / maxStat * 100).toFixed(1);
+                                    return `
+        <div style="margin-bottom:6px;">
+          <div style="display:flex;justify-content:space-between;font-size:12px;">
+            <span style="font-weight:600;color:${statColors[f]}">${statNames[f]}</span>
+            <span style="font-weight:700;">${val}</span>
+          </div>
+          <div style="height:6px;background:var(--bg);border-radius:3px;overflow:hidden;">
+            <div style="height:100%;width:${pct}%;background:${statColors[f]};border-radius:3px;transition:width 0.3s;"></div>
+          </div>
+        </div>`;
+                             }).join('');
+                             const imgHtml = s.image_url ? `<div style="position:relative;"><img src="${s.image_url}" alt="${s.name}" style="max-width:56px;max-height:56px;object-fit:contain;margin:0 auto 4px;display:block;" onerror="this.style.display='none';this.parentElement.innerHTML='<i class=\\'fas fa-dragon\\' style=\\'font-size:24px;color:var(--primary);margin-bottom:4px;display:block;\\'></i>'"></div>` : `<i class="fas fa-dragon" style="font-size:24px;color:var(--primary);margin-bottom:4px;display:block;"></i>`;
+                             var skillsHtml = '';
+                             if (skills.length > 0) {
+                                    skillsHtml = '<div class="form-group"><div class="form-label">可学习技能 (' + skills.length + ')</div><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:8px;">' + skills.map(function(sk2) {
+                                           var cls2 = elMap[sk2.element] || '';
+                                           return '<div onclick="showSkillDetail(' + sk2.skill_id + ')" style="text-align:center;padding:8px 4px;background:var(--card);border-radius:8px;cursor:pointer;box-shadow:0 1px 2px rgba(0,0,0,0.04);"><span class="tag tag-' + cls2 + '" style="font-size:10px;">' + sk2.element + '</span><div style="font-size:11px;margin-top:4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + sk2.name + '</div><div style="font-size:10px;color:var(--text-light);">' + (sk2.power || '-') + '/' + (sk2.pp || '-') + '</div></div>';
+                                    }).join('') + '</div></div>';
+                             }
+                             document.getElementById('spiritDetailBody').innerHTML = `
+      <div class="element-calc">
+        <div style="text-align:center;margin-bottom:16px;">
+          ${imgHtml}
+          <h2 style="margin-top:4px;">${s.name}</h2>
+          <span class="tag tag-${tagEl}">${s.element}</span>
+        </div>
+        <div style="border-top:1px solid var(--border);padding-top:12px;">
+          <div class="form-group"><div class="form-label">属性</div><div>${s.type || '无'}</div></div>
+          <div class="form-group" style="margin-bottom:12px;">
+            <div class="form-label">种族值</div>
+            ${statsHtml}
+          </div>
+          ${s.abilities_text ? `<div class="form-group"><div class="form-label">特性</div><div style="font-size:13px;color:var(--text);">${s.abilities_text}</div></div>` : ''}
+          ${s.evolution_condition ? `<div class="form-group"><div class="form-label">进化条件</div><div style="font-size:13px;color:var(--text-light);">${s.evolution_condition}</div></div>` : ''}
+          ${(s.egg_group_qq || s.egg_group_lcx) && (s.egg_group_qq || s.egg_group_lcx) !== '不能' && (s.egg_group_qq || s.egg_group_lcx) !== '无法孵蛋' ? `<div class="form-group"><div class="form-label">蛋组</div><div style="font-size:13px;color:var(--text-light);">${s.egg_group_qq || s.egg_group_lcx}</div></div>` : ''}
+          ${s.habitat ? `<div class="form-group"><div class="form-label">栖息地</div><div style="font-size:13px;">${s.habitat}</div></div>` : ''}
+          ${s.description ? `<div class="form-group"><div class="form-label">描述</div><div style="color:var(--text-light);font-size:13px;line-height:1.6;">${s.description}</div></div>` : ''}
+          ${skillsHtml}
+        </div>
+      </div>
+    `;
+                      } catch (e) { console.error(e); }
+               }
+              function hideSpiritDetail() {
+                     document.getElementById('page-spirit-detail').classList.remove('show');
+                     showPage('spirits');
+              }
+
+// ===== SKILL DETAIL =====
+                let pageStack = [];
+                let currentSkillId = null;
+                let currentForms = null;
+
+                async function showSkillDetail(id) {
+                       document.querySelectorAll('.detail-page').forEach(function(p){ p.classList.remove('show'); });
+                       var page = document.getElementById('page-skill-detail');
+                       page.classList.add('show');
+                       currentSkillId = id;
+                       document.getElementById('skillDetailName').textContent = '加载中...';
+                       document.getElementById('skillDetailBody').innerHTML = '<div class="loading"><i class="fas fa-spinner fa-spin"></i> 加载中...</div>';
+                       try {
+                              var res = await Promise.all([fetch(API+'/skills/'+id),fetch(API+'/skills/'+id+'/spirits')]);
+                              var sd = await res[0].json(), spd = await res[1].json();
+                              if (sd.code !== 0) return;
+                              var s = sd.data, spirits = spd.code===0 ? spd.data : [];
+                              document.getElementById('skillDetailName').textContent = s.name;
+                              var elMap = { '火':'fire','水':'water','草':'grass','电':'electric','冰':'ice','暗':'dark','光':'light','地':'ground','风':'wind','龙':'dragon' };
+                              var cls = elMap[s.element] || '';
+                              var sh = spirits.length>0 ? '<div style="margin-top:16px;"><div style="font-size:13px;color:var(--primary);text-align:center;font-weight:600;">可学习精灵 ('+spirits.length+')</div><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px;">'+spirits.map(function(p){ return '<div style="text-align:center;cursor:pointer;background:var(--card);border-radius:8px;padding:8px 4px;box-shadow:0 1px 2px rgba(0,0,0,0.04);" onclick="pageStack.push(function(){showSkillDetail(currentSkillId)});showSpiritDetail('+p.spirit_id+')"><div style="width:40px;height:40px;margin:0 auto 4px;border-radius:50%;background:var(--bg);display:flex;align-items:center;justify-content:center;overflow:hidden;">'+(p.image_url?'<img src="'+p.image_url+'" style="width:32px;height:32px;object-fit:contain;" onerror="this.outerHTML=\'<i class=\\\'fas fa-dragon\\\' style=\\\'font-size:18px;color:#ccc\\\'></i>\'">':'<i class="fas fa-dragon" style="font-size:18px;color:#ccc"></i>')+'</div><div style="font-size:11px;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+p.name+'</div></div>'; }).join('')+'</div></div>' : '';
+                              document.getElementById('skillDetailBody').innerHTML = '<div class="element-calc"><div style="text-align:center;margin-bottom:16px;"><span class="tag tag-'+cls+'">'+s.element+'</span><span style="margin-left:8px;font-size:14px;color:var(--text-light);">'+s.type+'</span></div><div style="display:flex;justify-content:space-around;text-align:center;padding:10px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin-bottom:12px;"><div><div style="font-size:11px;color:var(--text-light);">威力</div><div style="font-size:20px;font-weight:700;color:var(--primary);">'+(s.power||'-')+'</div></div><div><div style="font-size:11px;color:var(--text-light);">PP</div><div style="font-size:20px;font-weight:700;">'+(s.pp||'-')+'</div></div><div><div style="font-size:11px;color:var(--text-light);">命中</div><div style="font-size:20px;font-weight:700;">'+(s.accuracy||'-')+'</div></div></div>'+(s.description?'<div style="font-size:14px;color:var(--text);line-height:1.8;margin-bottom:8px;">'+s.description+'</div>':'')+sh+'</div>';
+                       } catch(e) { console.error(e); }
+                }
+
+                function switchSpiritForm(idx) {
+                       if (!currentForms || !currentForms[idx]) return;
+                       showSpiritDetail(currentForms[idx].id);
+                }
+
+               function hideSkillDetail() {
+                      var back = pageStack.pop();
+                      if (back) { document.querySelectorAll('.detail-page').forEach(function(p){ p.classList.remove('show'); }); back(); }
+                      else { document.getElementById('page-skill-detail').classList.remove('show'); showPage('skills'); }
+               }
+
+// ===== WIDGET =====
+               var WIDGET_USER = 'widget_user_' + Date.now();
+               var panelVisible = false, chatSending = false, msgCount = 0, idleTimer = null;
+
+               var orb = document.getElementById('chatOrb');
+               var panel = document.getElementById('chatPanel');
+               var msgs = document.getElementById('chatPanelMsgs');
+               var input = document.getElementById('chatPanelInput');
+               var sendBtn = document.getElementById('chatPanelSendBtn');
+
+               function getConfig() {
+                      return {
+                             apiKey: localStorage.getItem('chatbot_apiKey') || '',
+                             endpoint: localStorage.getItem('chatbot_endpoint') || 'https://ark.cn-beijing.volces.com/api/v3/chat/completions',
+                             model: localStorage.getItem('chatbot_model') || 'ep-20260418174714-jhvb7'
+                      };
+               }
+
+               function positionPanel() {
+                      var rr = orb.getBoundingClientRect(), pw = 340, ph = 440;
+                      var l = rr.right + 10, t = rr.top;
+                      if (l + pw > window.innerWidth - 10) l = rr.left - pw - 10;
+                      if (t + ph > window.innerHeight - 10) t = window.innerHeight - ph - 10;
+                      if (t < 10) t = 10; if (l < 10) l = 10;
+                      panel.style.left = l + 'px'; panel.style.top = t + 'px';
+               }
+
+               function addMsg(text, type) {
+                      var d = document.createElement('div');
+                      d.className = 'chat-bubble ' + type;
+                      d.innerHTML = text.replace(/\n/g, '<br>');
+                      msgs.appendChild(d);
+                      msgs.scrollTop = msgs.scrollHeight;
+                      msgCount++;
+                      return d;
+               }
+
+               function getGreetings() {
+                      var g = ['嗨～今天想和我聊什么呀？🥰','来啦来啦！有什么想说的吗～','你今天看起来心情不错哦✨ 有什么事想分享吗？','我在呢！无聊的时候就来找我吧～💗'];
+                      return g[Math.floor(Math.random()*g.length)];
+               }
+               function getNudges() {
+                      var n = ['还在看精灵图鉴吗～有什么想查的可以问我哦💗','发呆中…要不要查个配对啊？','悄悄提醒：别忘了蛋尺寸也可以匹配精灵哦🥚','闲着也是闲着，要不要看看技能图鉴？⚡'];
+                      return n[Math.floor(Math.random()*n.length)];
+               }
+               function startIdleTimer() { resetIdleTimer(); idleTimer = setInterval(function(){ if(panelVisible&&!chatSending&&msgCount>0) addMsg(getNudges(),'ai'); }, 90000); }
+               function resetIdleTimer() { if (idleTimer) clearInterval(idleTimer); if (panelVisible) startIdleTimer(); }
+
+               function showApiKeyPrompt() {
+                      var uid = 'ak_'+Date.now(), d = document.createElement('div');
+                      d.className = 'chat-bubble ai';
+                      d.innerHTML = '就差一步啦～输入你的 API Key 就能开始聊天了💕<br><input id="'+uid+'" type="password" placeholder="粘贴 API Key..." style="width:100%;margin-top:8px;padding:6px 10px;border:1px solid #f0e0e8;border-radius:8px;font-size:12px;" onkeydown="if(event.key===\'Enter\')submitApiKey(\''+uid+'\')"><button onclick="submitApiKey(\''+uid+'\')" style="margin-top:6px;padding:5px 16px;background:#FF6B35;color:#fff;border:none;border-radius:12px;cursor:pointer;font-size:12px;">确认</button>';
+                      msgs.appendChild(d); msgs.scrollTop = msgs.scrollHeight; msgCount++;
+                      setTimeout(function(){ var inp = document.getElementById(uid); if(inp) inp.focus(); }, 100);
+               }
+
+               function submitApiKey(inputId) {
+                      var inp = document.getElementById(inputId); if(!inp) return;
+                      var key = inp.value.trim(); if(!key) return;
+                      localStorage.setItem('chatbot_apiKey', key);
+                      addMsg('API Key 已保存！来和我聊天吧～💗', 'ai');
+                      setTimeout(function(){ input.focus(); }, 300);
+               }
+
+               function chipFill(prefix) { document.getElementById('chatPanelInput').value = prefix; document.getElementById('chatPanelInput').focus(); }
+
+               function showChatSettings() {
+                      var s = document.getElementById('chatSettings'), m = document.getElementById('chatPanelMsgs'), a = document.querySelector('.chat-panel-area');
+                      if (s.classList.contains('show')) { s.classList.remove('show'); m.style.display=''; a.style.display=''; }
+                      else {
+                             document.getElementById('chatName').value = localStorage.getItem('chatbot_name')||'迪莫';
+                             document.getElementById('chatApiKeyInput').value = getConfig().apiKey;
+                             document.getElementById('chatPersonality').value = localStorage.getItem('chatbot_personality')||'可爱、温柔、有点粘人，喜欢用语气词和颜文字';
+                             document.getElementById('chatStyle').value = localStorage.getItem('chatbot_style')||'短句为主，语气亲切，多用🥰💗✨之类颜文字';
+                             document.getElementById('chatCorpusWidget').value = localStorage.getItem('chatbot_corpus')||'';
+                             document.getElementById('chatSettingsStatus').textContent = '';
+                             s.classList.add('show'); m.style.display='none'; a.style.display='none';
+                      }
+               }
+               function toggleChatApiVis() {
+                      var inp = document.getElementById('chatApiKeyInput'), btn = document.getElementById('chatApiKeyToggle');
+                      if (inp.type==='password'){inp.type='text';btn.textContent='🙈'}else{inp.type='password';btn.textContent='👁️'}
+               }
+               function handleCorpusUpload(event) {
+                      var file = event.target.files[0]; if(!file) return;
+                      var reader = new FileReader();
+                      reader.onload = function(e){ document.getElementById('chatCorpusWidget').value = e.target.result; document.getElementById('corpusStatus').textContent = '已加载: '+file.name; };
+                      reader.readAsText(file, 'utf-8');
+               }
+               function saveAllChatSettings() {
+                      var key = document.getElementById('chatApiKeyInput').value.trim(); if(key) localStorage.setItem('chatbot_apiKey', key);
+                      var newName = document.getElementById('chatName').value.trim()||'迪莫';
+                      localStorage.setItem('chatbot_name', newName);
+                      document.getElementById('chatPanelName').textContent = newName + ' 💗';
+                      localStorage.setItem('chatbot_personality', document.getElementById('chatPersonality').value.trim());
+                      localStorage.setItem('chatbot_style', document.getElementById('chatStyle').value.trim());
+                      localStorage.setItem('chatbot_corpus', document.getElementById('chatCorpusWidget').value.trim());
+                      document.getElementById('chatSettingsStatus').textContent = '已保存！✓';
+                      document.getElementById('chatSettingsStatus').style.color = '#4CAF50';
+                      setTimeout(function(){ showChatSettings(); input.focus(); }, 600);
+               }
+
+               function detectIntent(text) {
+                      var t = text.trim(), m;
+                      m = t.match(/(?:蛋|尺寸)\s*(\d+\.?\d*)\s*[^0-9]*(\d+\.?\d*)/);
+                      if (m) return { type: 'egg_query', diam: parseFloat(m[1]), wt: parseFloat(m[2]) };
+                      m = t.match(/^配对\s+(\S{1,10})(?:\s+(\S{1,10}))?\s*$/);
+                      if (m) { if (m[2]) return { type: 'egg_pair', s1: m[1], s2: m[2] }; return { type: 'egg_pair_single', name: m[1] }; }
+                      var inner = t.replace(/^(?:帮我查|帮我查询|帮我|查一下|查询|查|看看|找一下|找找)\s*/, '');
+                      if (inner) {
+                             m = inner.match(/^(\S{1,10})\s*(?:和|配|跟|与|×)\s*(\S{1,10})/);
+                             if (m) return { type: 'egg_pair', s1: m[1], s2: m[2] };
+                             m = inner.match(/^(\S{1,10})\s*(?:配对|能.*配对|可以.*配对|配什么|能配|可以配|和谁孵|跟谁孵|的配对|.*孵蛋).*$/);
+                             if (m) return { type: 'egg_pair_single', name: m[1] };
+                      }
+                      m = t.match(/^(?:技能|查技能|搜索技能)\s*(.+)/);
+                      if (m) return { type: 'skill', name: m[1].replace(/的信息|的详情|是什么/g,'').trim() };
+                      m = t.match(/^(?:查询|查|看看|帮我查|帮我查询|找一下|找找)\s*(.+)/);
+                      if (m) return { type: 'spirit', name: m[1].replace(/的属性|的数据|怎么样|是什么|的介绍|的信息|.?配对.?/g,'').trim() };
+                      m = t.match(/^(.+?)(?:的属性|的数据|怎么样|是什么精灵|的介绍)$/);
+                      if (m && m[1].length <= 15) return { type: 'spirit', name: m[1].trim() };
+                      if (/^\S{1,10}$/.test(inner) && inner.length >= 1) return { type: 'spirit', name: inner };
+                      if (/^\S{1,10}$/.test(t) && t.length >= 1) return { type: 'spirit', name: t };
+                      return { type: 'chat' };
+               }
+
+async function fetchGameData(intent) {
+                       try {
+                              if (intent.type === 'spirit') {
+                                     var r = await fetch(API+'/spirits?name='+encodeURIComponent(intent.name)), d = await r.json();
+                                     if (d.code===0&&d.data.length>0) { var s = d.data.find(function(x){return x.hp>0;})||d.data[0]; return { cardData: s, context: s.name+'('+(s.element||'')+'系,HP'+(s.hp||'')+'/攻'+(s.attack||'')+'/防'+(s.defense||'')+'/特攻'+(s.special_attack||'')+'/特防'+(s.special_defense||'')+'/速'+(s.speed||'')+',蛋组:'+(s.egg_group_qq||s.egg_group_lcx||'无')+')' }; }
+                              } else if (intent.type === 'skill') {
+                                     var r = await fetch(API+'/skills?name='+encodeURIComponent(intent.name)), d = await r.json();
+                                     if (d.code===0&&d.data.length>0) { var s = d.data[0]; return { cardData: s, context: s.name+'('+(s.element||'')+'系,'+(s.type||'')+',威力'+(s.power||'')+',PP'+(s.pp||'')+')' }; }
+                              } else if (intent.type === 'egg_pair') {
+                                     var p = [fetch(API+'/spirits?name='+encodeURIComponent(intent.s1)),fetch(API+'/spirits?name='+encodeURIComponent(intent.s2))], res = await Promise.all(p);
+                                     var d1=await res[0].json(), d2=await res[1].json();
+                                     if(d1.code===0&&d2.code===0&&d1.data.length>0&&d2.data.length>0) { var s1=d1.data[0],s2=d2.data[0],eg1=s1.egg_group_qq||s1.egg_group_lcx||'',eg2=s2.egg_group_qq||s2.egg_group_lcx||'',gs=eg1.split(',').map(function(g){return g.trim();}),ok=gs.some(function(g){return eg2.indexOf(g)!==-1;}); return { cardData:{s1:s1.name,s2:s2.name,eg1:eg1,eg2:eg2,ok:ok}, context:s1.name+'+'+s2.name+(ok?'可配对':'不可配对') }; }
+                              } else if (intent.type === 'egg_query') {
+                                     var r = await fetch(API+'/egg-query?diameter='+intent.diam+'&weight='+intent.wt), d = await r.json();
+                                     if(d.code===0&&d.data.length>0) { var top=d.data.slice(0,8).map(function(p){return{name:p.pet_name,matchType:p.matchType,score:p.score};}); return { cardData:{total:d.data.length,topList:top}, context:'蛋尺寸匹配:共'+d.data.length+'候选,'+top.map(function(p){return p.name;}).join(',') }; }
+                              } else if (intent.type === 'egg_pair_single') {
+                                     var r = await fetch(API+'/spirits?name='+encodeURIComponent(intent.name)), d = await r.json();
+                                     if(d.code===0&&d.data.length>0) { var s=d.data.find(function(x){return x.hp>0;})||d.data[0],eg=s.egg_group_qq||s.egg_group_lcx||'';
+                                            if(!eg||eg==='不能'||eg==='无法孵蛋') return { cardData:{spiritName:s.name,eggGroup:'无（无法孵蛋）',partnerCount:0,samplePartners:'无'}, context:s.name+'无法孵蛋' };
+                                            var gs=eg.split(',').map(function(g){return g.trim();}), allR=await fetch(API+'/spirits'), allD=await allR.json();
+                                            if(allD.code===0) { var pts=allD.data.filter(function(x){if(x.name===s.name)return false;var xe=x.egg_group_qq||x.egg_group_lcx||'';return gs.some(function(g){return xe.indexOf(g)!==-1;});}), sp=pts.slice(0,15).map(function(p){return p.name;}).join(', '); return { cardData:{spiritName:s.name,eggGroup:eg,partnerCount:pts.length,samplePartners:sp}, context:s.name+'(蛋组:'+eg+')有'+pts.length+'个配对伴侣' }; }
+                                     }
+                              }
+                       } catch(e) { console.error(e); }
+                       return null;
+                }
+
+               function renderGameCard(intent, rawData) {
+                      if (!rawData) return null;
+                      var elMap = { '火':'fire','水':'water','草':'grass','电':'electric','冰':'ice','暗':'dark','光':'light','地':'ground','风':'wind','龙':'dragon' }, source='<div class="gc-source">📦 本地数据库</div>';
+                      if (intent.type === 'spirit') { var s=rawData; if(!s||!s.name) return null; var cls=elMap[s.element]||'',sts='HP:'+(s.hp||'?')+' 物攻:'+(s.attack||'?')+' 物防:'+(s.defense||'?')+' 特攻:'+(s.special_attack||'?')+' 特防:'+(s.special_defense||'?')+' 速度:'+(s.speed||'?'),eg=s.egg_group_qq||s.egg_group_lcx||''; return '<div class="game-card"><div class="gc-title">'+s.name+'</div><div class="gc-sub"><span class="gc-tag '+cls+'">'+(s.element||'?')+'</span></div><div class="gc-row">'+sts.split(' ').map(function(st){return'<span class="gc-stat">'+st+'</span>';}).join(' ')+'</div>'+(eg?'<div style="font-size:11px;color:#888;margin-top:4px;">蛋组: '+eg+'</div>':'')+(s.description?'<div style="font-size:11px;color:#999;margin-top:4px;">'+(s.description||'').slice(0,60)+'</div>':'')+source+'</div>'; }
+                      if (intent.type === 'skill') { var s=rawData; if(!s||!s.name) return null; var cls=elMap[s.element]||''; return '<div class="game-card"><div class="gc-title">'+s.name+'</div><div class="gc-sub"><span class="gc-tag '+cls+'">'+(s.element||'?')+'</span> · '+(s.type||'')+'</div><div class="gc-row"><span class="gc-stat">威力:'+(s.power||'?')+'</span><span class="gc-stat">PP:'+(s.pp||'?')+'</span><span class="gc-stat">命中:'+(s.accuracy||'?')+'</span></div>'+(s.description?'<div style="font-size:11px;color:#999;margin-top:4px;">'+(s.description||'').slice(0,80)+'</div>':'')+source+'</div>'; }
+                      if (intent.type === 'egg_pair') { var m=rawData.ok?'<span class="gc-match">可配对孵蛋</span>':'<span class="gc-nomatch">不可配对</span>'; return '<div class="game-card"><div class="gc-title">配对结果</div><div style="font-size:13px;margin:6px 0;">'+rawData.s1+' + '+rawData.s2+'</div>'+m+'<div style="font-size:11px;color:#888;margin-top:4px;">'+rawData.s1+'蛋组:'+(rawData.eg1||'无')+'<br>'+rawData.s2+'蛋组:'+(rawData.eg2||'无')+'</div>'+source+'</div>'; }
+                      if (intent.type === 'egg_pair_single') { var cb=rawData.partnerCount>0,badge=cb?'<span class="gc-match">可配对孵蛋</span>':'<span class="gc-nomatch">无法孵蛋配对</span>'; return '<div class="game-card"><div class="gc-title">'+rawData.spiritName+' 配对</div>'+badge+'<div style="font-size:12px;color:#888;margin:4px 0;">蛋组: '+(rawData.eggGroup||'无')+'</div>'+(cb?'<div style="font-size:11px;color:#999;margin-bottom:4px;">可配对伴侣: '+rawData.partnerCount+' 个</div><div class="gc-partner">'+rawData.samplePartners+'</div>':'')+source+'</div>'; }
+                      if (intent.type === 'egg_query') { return '<div class="game-card"><div class="gc-title">蛋尺寸匹配</div><div style="font-size:12px;color:#888;margin:4px 0;">共'+rawData.total+'个候选，前'+Math.min(rawData.topList.length,8)+'个</div><div class="gc-partner">'+rawData.topList.map(function(p){return p.name+' ('+p.matchType+' '+p.score+'%)';}).join('<br>')+'</div>'+source+'</div>'; }
+                      return null;
+               }
+
+               function getChatPersona() {
+                      return {
+                             personality: localStorage.getItem('chatbot_personality')||'可爱、温柔、有点粘人，喜欢用语气词和颜文字',
+                             style: localStorage.getItem('chatbot_style')||'短句为主，语气亲切，多用🥰💗✨之类颜文字',
+                             corpus: localStorage.getItem('chatbot_corpus')||''
+                      };
+               }
+
+               async function chatSend() {
+                      var text = input.value.trim();
+                      if (!text || chatSending) return;
+                      input.value = ''; chatSending = true; sendBtn.disabled = true; sendBtn.textContent = '…';
+                      addMsg(text, 'user');
+                      var cfg = getConfig();
+                      if (!cfg.apiKey) { showApiKeyPrompt(); chatSending=false; sendBtn.disabled=false; sendBtn.textContent='➤'; return; }
+                      var intent = detectIntent(text), result = null;
+                      if (intent.type !== 'chat') result = await fetchGameData(intent);
+                      if (result && result.cardData) {
+                             try {
+                                    var cardHtml = renderGameCard(intent, result.cardData);
+                                    if (cardHtml) { var cd = document.createElement('div'); cd.className='game-card'; cd.innerHTML=cardHtml; var inner=cd.querySelector('.game-card'); if(inner) cd.innerHTML=inner.innerHTML; msgs.appendChild(cd); msgs.scrollTop=msgs.scrollHeight; msgCount++; }
+                             } catch(e) { console.error(e); }
+                      }
+                      var persona = getChatPersona();
+                      var aiMessage = text;
+                      if (result && result.context) aiMessage = '【用户问题】'+text+'\n【本地数据摘要】'+result.context+'\n请用你的语气简短评论这个结果，不要重复数据，不要编造不存在的信息。';
+                      try {
+                             var r = await fetch(API+'/chat', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({userId:WIDGET_USER,message:aiMessage,name:localStorage.getItem('chatbot_name')||'迪莫',personality:persona.personality,style:persona.style,chatCorpus:persona.corpus,gameData:result?result.context:null,apiKey:cfg.apiKey,endpoint:cfg.endpoint,model:cfg.model}) });
+                             var d = await r.json();
+                             if (d.code===200) addMsg(d.data.reply,'ai'); else addMsg('唔…'+d.msg,'ai');
+                      } catch(e) { addMsg('哎呀，连接不上聊天服务😢 请确认聊天后端已启动（端口3001）','ai'); }
+                      chatSending = false; sendBtn.disabled = false; sendBtn.textContent = '➤'; input.focus();
+                      resetIdleTimer();
+               }
+
+               function toggleChat() {
+                      panelVisible = !panelVisible;
+                      if (panelVisible) { positionPanel(); panel.classList.add('show'); input.focus();
+                             if (msgCount===0) { var cfg=getConfig(); if(!cfg.apiKey) showApiKeyPrompt(); else { addMsg(getGreetings(),'ai'); } startIdleTimer(); }
+                      } else { panel.classList.remove('show'); if(idleTimer){clearInterval(idleTimer);idleTimer=null;} }
+               }
+
+               // Drag
+               var isDragging, hasMoved, dragStartX, dragStartY, orbStartLeft, orbStartTop;
+               orb.addEventListener('mousedown', function(e) { isDragging=true;hasMoved=false;dragStartX=e.clientX;dragStartY=e.clientY;var rr=orb.getBoundingClientRect();orbStartLeft=rr.left;orbStartTop=rr.top;orb.style.transition='none';e.preventDefault(); });
+               orb.addEventListener('touchstart', function(e) { if(e.touches.length!==1)return;isDragging=true;hasMoved=false;dragStartX=e.touches[0].clientX;dragStartY=e.touches[0].clientY;var rr=orb.getBoundingClientRect();orbStartLeft=rr.left;orbStartTop=rr.top;orb.style.transition='none'; },{passive:false});
+               function onMove(cx,cy){if(!isDragging)return;var dx=cx-dragStartX,dy=cy-dragStartY;if(Math.abs(dx)>2||Math.abs(dy)>2){if(!hasMoved){orb.style.right='auto';orb.style.bottom='auto';}hasMoved=true;}orb.style.left=(orbStartLeft+dx)+'px';orb.style.top=(orbStartTop+dy)+'px';if(panelVisible)positionPanel();}
+               document.addEventListener('mousemove', function(e){onMove(e.clientX,e.clientY);});
+               document.addEventListener('touchmove', function(e){if(e.touches.length===1){onMove(e.touches[0].clientX,e.touches[0].clientY);e.preventDefault();}},{passive:false});
+               function onEnd(){if(!isDragging)return;isDragging=false;orb.style.transition='';if(!hasMoved)toggleChat();}
+               document.addEventListener('mouseup', onEnd);
+               document.addEventListener('touchend', onEnd);
+               orb.style.left = ''; orb.style.top = ''; orb.style.right = '16px'; orb.style.bottom = '100px';
+               var savedName = localStorage.getItem('chatbot_name')||'迪莫';
+               document.getElementById('chatPanelName').textContent = savedName + ' 💗';
+
+              // ===== INIT =====
+              loadMerchants();
+
+              // Initialize element calc
+              calcElement();
+       </script>
+</body>
+
+</html>
